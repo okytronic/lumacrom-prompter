@@ -1,10 +1,14 @@
-# Lumacrom Prompter v3.1
+# Lumacrom Prompter
 
-This package contains the updated Lumacrom Prompter static site.
+Static browser app for building prompts for image, video, and storyboard generation.
 
-Included:
-- New Lumacrom geometric logo icon
-- Fixed right inspector so the search bar stays in place and the content below it scrolls internally
-- Added **Sheet** mode for character sheets, pose sheets, prop/item sheets, weapon sheets, vehicle sheets, asset sheets, and location scene sheets
-- Model-aware prompt compilation for image, video, storyboard, and sheet modes
-- PWA files for Home Screen install
+## GitHub Pages
+
+This repository is ready to publish from the root of the `main` branch with GitHub Pages.
+
+Files:
+- `index.html` — the app
+- `manifest.webmanifest` — installable web-app metadata
+- `service-worker.js` — offline/cache support
+- `icons/` — home-screen/PWA icons
+- `.nojekyll` — disables Jekyll processing

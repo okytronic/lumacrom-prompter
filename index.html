@@ -3,685 +3,342 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Lumacrom Prompter v3.1</title>
-<meta name="theme-color" content="#0b0c10" />
-<link rel="manifest" href="manifest.webmanifest" />
-<link rel="icon" href="icons/icon-192.png" sizes="192x192" />
+<title>Lumacrom Prompter v3</title>
+<meta name="theme-color" content="#08090c" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Lumacrom Prompter" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./icons/icon-192.png" />
 <style>
-:root{
-  --bg:#090a0d;--bg2:#121318;--panel:#13141a;--panel2:#191b22;--line:#2b2f38;--text:#f3f1ea;--muted:#9a9ea9;
-  --accent:#e4dcc8;--accent2:#b3d4ff;--danger:#d48989;--shadow:0 18px 55px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%;background:radial-gradient(circle at top left,#1c1d25 0,#0b0c11 35%,#07080b 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{overflow:hidden}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-.small{font-size:12px;color:var(--muted)}
-.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;border-bottom:1px solid var(--line);background:rgba(11,12,16,.88);backdrop-filter:blur(14px)}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}
-.logoWrap{width:42px;height:42px;border-radius:12px;border:1px solid #3a3d46;background:linear-gradient(160deg,#22252f,#101217);display:grid;place-items:center;box-shadow:var(--shadow)}
-.logoWrap svg{width:30px;height:30px}
-.brandText{min-width:0}
-.brandText b{display:block;font-size:18px;letter-spacing:.03em;font-weight:700}
-.brandText span{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:2px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.btn{background:#171920;border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:10px}
-.btn:hover{background:#20232c;border-color:#414651}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#161616;font-weight:700}
-.btn.small{padding:7px 10px;font-size:12px}
-.btn.danger{color:#efb0b0}
-.layout{display:grid;grid-template-columns:280px minmax(0,1fr) 380px;height:calc(100vh - 72px)}
-.sidebar,.workspace,.inspector{min-height:0}
-.sidebar{border-right:1px solid var(--line);background:rgba(15,16,21,.88);overflow:auto;padding:18px}
-.workspace{overflow:auto;padding:22px}
-.inspector{border-left:1px solid var(--line);background:rgba(14,15,19,.92);display:flex;flex-direction:column;min-height:0}
-.inspectorHead{padding:16px 16px 10px;border-bottom:1px solid var(--line)}
-.inspectorScroll{flex:1;overflow:auto;padding:14px 16px 18px}
-.label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#8c909b;margin:0 0 8px}
-.modeSelect,.select,.field input,.field textarea,.field select,.editor,textarea,input[type="text"],input[type="number"]{
-  width:100%;background:#0d0f14;border:1px solid #303441;color:var(--text);border-radius:10px;padding:11px 12px;outline:none;
-}
-.field textarea,.editor{min-height:120px;resize:vertical}
-.field textarea.smallArea{min-height:72px}
-.field input:focus,.field textarea:focus,.field select:focus,.select:focus,.modeSelect:focus,.editor:focus{border-color:#7a7363;box-shadow:0 0 0 3px rgba(228,220,200,.08)}
-.modeButtons{display:grid;gap:6px;margin-top:8px}
-.modeBtn{border:1px solid transparent;background:transparent;color:#c1c3cb;border-radius:11px;padding:12px 12px;display:flex;gap:10px;align-items:center;text-align:left}
-.modeBtn .dot{width:9px;height:9px;border:1px solid #7d818b;border-radius:50%}
-.modeBtn:hover{background:#171921}
-.modeBtn.active{background:#1d2028;border-color:#444956;color:#fff}
-.modeBtn.active .dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px rgba(228,220,200,.08)}
-.panel{border:1px solid var(--line);background:rgba(18,19,25,.9);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
-.sectionTitle{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:12px}
-.sectionTitle h2{margin:0;font-size:22px}
-.sectionTitle p{margin:3px 0 0;font-size:13px;color:var(--muted)}
-.grid2,.grid3,.grid4{display:grid;gap:12px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
-.stack{display:grid;gap:12px}.field label{display:block;font-size:11px;letter-spacing:.12em;color:#9ea2ad;text-transform:uppercase;margin-bottom:7px}
-.hint{font-size:12px;color:var(--muted);line-height:1.5}
-.output{min-height:220px;background:#0b0c10}
-.outputActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
-.cardList{display:grid;gap:12px;margin-top:12px}.shotCard{border:1px solid #303440;background:#11131a;border-radius:14px;padding:12px}.shotHead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.shotHead b{font-size:14px}.timeTag{font-size:11px;color:#c8d5f5;border:1px solid #394052;border-radius:999px;padding:5px 8px;background:#131823}
-.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid #393d47;background:#161820;color:#f0ebdf;border-radius:999px;padding:7px 10px;font-size:12px}
-.param{border:1px solid #2d313c;background:#101217;border-radius:14px;padding:12px;margin-bottom:12px}.paramTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.paramTitle b{font-size:13px}.paramTitle span{font-size:11px;color:var(--muted)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid #393d47;background:#171921;color:#f0ede5;border-radius:999px;padding:7px 10px;font-size:12px}
-.chip:hover{background:#20232b}
-.tokens{display:flex;flex-wrap:wrap;gap:8px}.token{display:flex;align-items:center;border:1px solid #39404b;background:#13161d;border-radius:999px;overflow:hidden}.token .tokenBtn{background:transparent;border:0;color:#f2ecde;padding:8px 10px;font-size:12px}.token .del{border-left:1px solid #313540;color:#8f95a1;padding:8px 9px}
-.tokenAdd{display:grid;grid-template-columns:95px 1fr 42px;gap:8px;margin-top:10px}.tokenAdd input,.tokenAdd select{width:100%;background:#0d0f14;border:1px solid #303441;color:var(--text);border-radius:10px;padding:10px}
-.kv{display:grid;gap:6px}
-.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid #343845;background:#151821;border-radius:999px;padding:7px 10px;font-size:12px;color:#d7dbe7}
-.stickyNote{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
-.dual{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:12px}
-.footerNote{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.55}
-@media (max-width:1200px){.layout{grid-template-columns:250px minmax(0,1fr) 330px}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:980px){body{overflow:auto}.layout{grid-template-columns:1fr;height:auto}.sidebar,.inspector,.workspace{height:auto;min-height:auto}.inspector{border-left:0;border-top:1px solid var(--line)}.sidebar{border-right:0;border-bottom:1px solid var(--line)}.inspector{display:block}.inspectorHead{position:sticky;top:0;background:rgba(14,15,19,.98);z-index:2}.inspectorScroll{max-height:none;overflow:visible}.grid2,.grid3,.grid4,.dual{grid-template-columns:1fr}}
+:root{--bg:#08090c;--panel:#111217;--panel2:#17181e;--line:#2b2d35;--text:#f4f3ef;--muted:#9b9ca7;--accent:#e8dfc8;--accentText:#131313;--danger:#d68181;--shadow:0 18px 55px rgba(0,0,0,.34)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 10% 0%,#181922 0,#090a0d 42%,#07080a 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.topbar{position:sticky;top:0;z-index:50;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 20px;border-bottom:1px solid var(--line);background:rgba(8,9,12,.91);backdrop-filter:blur(16px)}.brand{display:flex;align-items:center;gap:11px}.mark{width:35px;height:35px;border:1px solid #4a463d;border-radius:10px;display:grid;place-items:center;background:linear-gradient(145deg,#24242b,#101115)}.mark:before{content:"L";font:700 20px Georgia,serif;color:var(--accent)}.brandText b{display:block;font:600 20px Georgia,serif;letter-spacing:.03em}.brandText span{display:block;font-size:10px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;margin-top:2px}.actions{display:flex;gap:8px}.btn{border:1px solid var(--line);background:#17181e;color:var(--text);border-radius:10px;padding:10px 13px}.btn:hover{border-color:#4b4d58;background:#202129}.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accentText);font-weight:750}.btn.danger{color:#f1aaaa}.btn.small{padding:7px 10px;font-size:12px}
+.layout{display:grid;grid-template-columns:270px minmax(460px,1fr) 360px;min-height:calc(100vh - 72px)}.sidebar,.inspector{padding:18px;background:rgba(13,14,18,.8);overflow:auto}.sidebar{border-right:1px solid var(--line)}.inspector{border-left:1px solid var(--line)}.workspace{padding:22px;min-width:0;overflow:auto}.label{font-size:10px;color:#777985;letter-spacing:.16em;text-transform:uppercase;margin:9px 0 8px}
+.modeSelect{width:100%;background:#0d0e12;border:1px solid #31333c;color:#fff;border-radius:10px;padding:11px;margin-bottom:8px}.modeButtons{display:grid;gap:6px}.modeBtn{width:100%;display:flex;align-items:center;gap:9px;border:1px solid transparent;background:transparent;color:#bcbec8;border-radius:10px;padding:11px;text-align:left}.modeBtn:hover{background:#17181e}.modeBtn.active{background:#1c1d24;border-color:#3a3c46;color:#fff}.dot{width:8px;height:8px;border:1px solid #858792;border-radius:50%}.modeBtn.active .dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,223,200,.08)}
+.box{border:1px solid var(--line);background:#111217;border-radius:13px;padding:12px}.select{width:100%;background:#0c0d11;border:1px solid #30323b;color:#fff;border-radius:9px;padding:10px 11px;outline:none}.select:focus,.field input:focus,.field select:focus,.field textarea:focus,.editor:focus,.shot textarea:focus,.shot select:focus{border-color:#716b5d;box-shadow:0 0 0 3px rgba(232,223,200,.06)}.modelHint{font-size:12px;line-height:1.45;color:var(--muted);margin-top:8px}.manual{margin-top:8px;border-top:1px solid var(--line);padding-top:9px}.manual b{font-size:11px}.manual p{font-size:11px;line-height:1.5;color:#999aa5;margin:5px 0 0}.manualTag{display:inline-block;margin-top:7px;font-size:10px;border:1px solid #393a42;border-radius:999px;padding:5px 7px;color:#aaaab4}
+.elements{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.token{display:flex;border:1px solid #393a42;border-radius:999px;overflow:hidden;background:#1a1b21}.token button{border:0;background:transparent;color:#e9e6dc;padding:7px 9px;font-size:11px}.token .x{padding-left:0;color:#81838d}.elementAdd{display:grid;grid-template-columns:92px 1fr 38px;gap:6px}.elementAdd input,.elementAdd select{min-width:0;background:#0c0d11;border:1px solid #30323b;color:#fff;border-radius:8px;padding:9px}.saved{display:grid;gap:6px}.savedRow{display:flex;gap:6px}.savedRow button:first-child{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:15px}.heading h1{font:500 30px Georgia,serif;margin:0}.heading p{font-size:13px;color:var(--muted);margin:5px 0 0}.badge{font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #373943;border-radius:999px;padding:7px 9px;color:#aeb0ba;white-space:nowrap}
+.card{border:1px solid var(--line);background:#111217;border-radius:14px;padding:14px}.card h3{font-size:13px;margin:0 0 12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px;margin-bottom:10px}.field:last-child{margin-bottom:0}.field label,.shot label{font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:#838590}.field input,.field select,.field textarea,.shot textarea,.shot select{width:100%;background:#0c0d11;border:1px solid #2e3038;color:#f4f3ef;border-radius:9px;padding:10px 11px;outline:none}.field textarea,.shot textarea{resize:vertical;line-height:1.5}.editorCard{margin-top:14px;border:1px solid var(--line);border-radius:15px;background:#0d0e12;overflow:hidden;box-shadow:var(--shadow)}.editorHead{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--line);background:#14151b}.editorHead span{font-size:12px;color:#9597a2}.mini{display:flex;gap:6px}.editor{width:100%;min-height:230px;border:0;outline:none;resize:vertical;background:#0a0b0e;color:#f3f2ee;padding:17px;line-height:1.65;font:13px "SFMono-Regular",Consolas,monospace}.counter{font-size:10px;color:#747680;text-align:right;padding:7px 11px;border-top:1px solid var(--line)}.sourceEditor{min-height:170px}.outputEditor{min-height:260px}
+.modeGrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:12px}.shotList{display:grid;gap:12px;margin-top:14px}.shot{border:1px solid var(--line);border-radius:13px;background:#101116;padding:13px}.shotHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.shotHead b{font:500 17px Georgia,serif}.shotHead span{font-size:10px;color:#787a85}.shotGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:9px}.inline{display:grid;grid-template-columns:1fr 1fr;gap:9px}.autoNote{font-size:11px;color:#989aa5;line-height:1.5;border:1px solid #33343c;background:#15161b;border-radius:10px;padding:10px;margin-top:10px}
+.searchWrap{position:sticky;top:0;background:rgba(13,14,18,.98);padding-bottom:9px;z-index:4}.search{width:100%;background:#0c0d11;border:1px solid var(--line);color:#fff;border-radius:10px;padding:10px 11px}.param{padding:13px 0;border-top:1px solid var(--line)}.param:first-of-type{border-top:0}.paramTitle{display:flex;justify-content:space-between;margin-bottom:8px}.paramTitle b{font-size:12px}.paramTitle span{font-size:10px;color:#696b74}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid #30323a;background:#17181e;color:#c6c8d0;border-radius:999px;padding:7px 9px;font-size:11px}.chip:hover{background:#23242b;color:#fff;border-color:#4a4c56}.notice{margin-top:12px;border:1px solid #39362f;background:#161510;border-radius:11px;padding:10px 11px;font-size:11px;color:#aaa396;line-height:1.5}.toast{position:fixed;right:20px;bottom:20px;z-index:200;background:#eee8d7;color:#111;border-radius:10px;padding:11px 14px;font-weight:750;box-shadow:0 12px 40px rgba(0,0,0,.35);opacity:0;transform:translateY(18px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}
+@media(max-width:1180px){.layout{grid-template-columns:240px 1fr}.inspector{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.paramWrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0 18px}.searchWrap{position:static}}
+@media(max-width:820px){.topbar{height:auto;min-height:66px;padding:10px 12px}.brandText span{display:none}.actions .desktop{display:none}.layout{display:block}.sidebar,.inspector{border:0;border-bottom:1px solid var(--line)}.sidebar{padding:12px}.workspace{padding:14px}.modeButtons{grid-template-columns:repeat(3,1fr)}.modeBtn{justify-content:center;padding:9px 6px;font-size:12px}.modeBtn .dot{display:none}.heading{align-items:flex-start;flex-direction:column}.grid2,.modeGrid,.shotGrid,.inline,.paramWrap{grid-template-columns:1fr}.inspector{display:block}.elementAdd{grid-template-columns:88px 1fr 38px}.outputEditor{min-height:220px}}
 </style>
 </head>
 <body>
 <header class="topbar">
-  <div class="brand">
-    <div class="logoWrap" aria-hidden="true">
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18 80L47 20L84 80H18Z" stroke="#E4DCC8" stroke-width="8" stroke-linejoin="round"/>
-        <circle cx="67" cy="55" r="11" fill="#E4DCC8"/>
-      </svg>
-    </div>
-    <div class="brandText">
-      <b>Lumacrom Prompter</b>
-      <span>v3.1 • image • video • storyboard • sheet</span>
-    </div>
-  </div>
-  <div class="actions">
-    <button class="btn small" id="savePresetTop">Save Preset</button>
-    <button class="btn small" id="loadPresetTop">Load Preset</button>
-    <button class="btn small danger" id="clearAllTop">Clear</button>
-    <button class="btn primary" id="copyTop">Copy Output</button>
-  </div>
+  <div class="brand"><div class="mark"></div><div class="brandText"><b>Lumacrom Prompter</b><span>Model-aware image + video prompt builder · v3</span></div></div>
+  <div class="actions"><button class="btn desktop" id="saveBtn">Save Preset</button><button class="btn desktop" id="clearBtn">Clear</button><button class="btn primary" id="copyBtn">Copy Final Prompt</button></div>
 </header>
 <div class="layout">
-  <aside class="sidebar">
-    <div class="label">Mode</div>
-    <select class="modeSelect" id="modeSelect">
-      <option value="image">Image</option>
-      <option value="video">Video</option>
-      <option value="storyboard">Storyboard</option>
-      <option value="sheet">Sheet</option>
+<aside class="sidebar">
+  <div class="label">Creation mode</div>
+  <select id="modeSelect" class="modeSelect"><option value="image">Image</option><option value="video">Video</option><option value="storyboard">Storyboard</option></select>
+  <div class="modeButtons">
+    <button class="modeBtn active" data-mode="image"><span class="dot"></span>Image</button>
+    <button class="modeBtn" data-mode="video"><span class="dot"></span>Video</button>
+    <button class="modeBtn" data-mode="storyboard"><span class="dot"></span>Storyboard</button>
+  </div>
+
+  <div class="label">Target model</div>
+  <div class="box">
+    <select id="modelSelect" class="select">
+      <optgroup label="Image models">
+        <option value="openai-image">OpenAI Image</option>
+        <option value="nano-banana-pro">Nano Banana Pro / Gemini Image</option>
+        <option value="nano-banana-2">Nano Banana 2</option>
+        <option value="midjourney">Midjourney</option>
+        <option value="flux">FLUX</option>
+        <option value="sdxl">Stable Diffusion / SDXL</option>
+        <option value="runway-image">Runway Gen-4 Image</option>
+        <option value="ideogram">Ideogram</option>
+        <option value="recraft">Recraft</option>
+        <option value="firefly">Adobe Firefly</option>
+      </optgroup>
+      <optgroup label="Video models">
+        <option value="kling">Kling</option>
+        <option value="veo">Veo 3.1</option>
+        <option value="runway-video">Runway Gen-4.5</option>
+        <option value="sora2">Sora 2 / OpenAI Video</option>
+        <option value="seedance">Seedance</option>
+        <option value="hailuo">Hailuo / MiniMax Video</option>
+        <option value="luma">Luma Dream Machine / Ray</option>
+        <option value="higgsfield">Higgsfield</option>
+        <option value="pika">Pika</option>
+      </optgroup>
     </select>
-    <div class="modeButtons" id="modeButtons">
-      <button class="modeBtn active" data-mode="image"><span class="dot"></span><span><b>Image</b><br><span class="small">Single prompt builder</span></span></button>
-      <button class="modeBtn" data-mode="video"><span class="dot"></span><span><b>Video</b><br><span class="small">Timed multi-shot prompts</span></span></button>
-      <button class="modeBtn" data-mode="storyboard"><span class="dot"></span><span><b>Storyboard</b><br><span class="small">Shot-by-shot image boards</span></span></button>
-      <button class="modeBtn" data-mode="sheet"><span class="dot"></span><span><b>Sheet</b><br><span class="small">Character / prop / vehicle / location sheets</span></span></button>
+    <div class="modelHint" id="modelHint"></div>
+    <div class="manual"><b id="manualTitle">Prompt manual</b><p id="manualText"></p><span class="manualTag" id="manualTag"></span></div>
+  </div>
+
+  <div class="label">Elements (@)</div>
+  <div class="box">
+    <div class="elementAdd"><select id="elementType"><option value="ch">Character</option><option value="loc">Location</option><option value="prop">Prop</option><option value="style">Style</option><option value="ref">Reference</option></select><input id="elementName" placeholder="undertaker"><button class="btn small" id="addElementBtn">+</button></div>
+    <div class="elements" id="elementTokens"></div>
+  </div>
+
+  <div class="label">Saved presets</div><div class="saved" id="savedList"></div>
+</aside>
+
+<main class="workspace">
+  <div class="heading"><div><h1 id="modeTitle">Image Prompt</h1><p id="modeDesc">Write the visual idea once; the target model changes how the final prompt is structured.</p></div><div class="badge" id="activeBadge">Active: Core Idea</div></div>
+
+  <section id="imageMode">
+    <div class="modeGrid">
+      <div class="card"><h3>Core visual idea</h3><div class="field"><label>Prompt / scene</label><textarea id="imageIdea" rows="7" placeholder="Example: @ch_undertaker standing in a ruined cathedral at midnight, holding a black obsidian blade..."></textarea></div><div class="inline"><div class="field"><label>Aspect ratio</label><select id="imageAspect"><option>16:9</option><option>9:16</option><option>1:1</option><option>4:3</option><option>3:4</option><option>2.39:1</option></select></div><div class="field"><label>Purpose</label><select id="imagePurpose"><option value="">None</option><option>cinematic keyframe</option><option>storyboard frame</option><option>editorial photograph</option><option>advertising campaign image</option><option>concept art</option><option>character design</option><option>product image</option></select></div></div>
+      <div class="inline"><div class="field"><label>Camera</label><select id="imageCamera"><option value="">Auto / unspecified</option><option value="Panavision Millennium DXL2">Panavision Millennium DXL2</option><option value="Panavision Panaflex Millennium XL2 35mm film camera">Panavision Panaflex Millennium XL2 — 35mm film</option><option value="ARRI Alexa 35">ARRI Alexa 35</option><option value="ARRI Alexa Mini LF">ARRI Alexa Mini LF</option><option value="ARRI Alexa 65">ARRI Alexa 65</option><option value="ARRICAM LT 35mm film camera">ARRICAM LT — 35mm film</option><option value="ARRIFLEX 435 35mm film camera">ARRIFLEX 435 — 35mm film</option><option value="ARRIFLEX 416 16mm film camera">ARRIFLEX 416 — 16mm film</option><option value="RED V-Raptor XL">RED V-Raptor XL</option><option value="RED Komodo-X">RED Komodo-X</option><option value="Sony VENICE 2">Sony VENICE 2</option><option value="Sony FX9">Sony FX9</option><option value="Blackmagic URSA Cine 12K">Blackmagic URSA Cine 12K</option><option value="Aaton XTR Prod 16mm film camera">Aaton XTR Prod — 16mm film</option><option value="Bolex H16 16mm film camera">Bolex H16 — 16mm film</option><option value="Canon 1014 XL-S Super 8 film camera">Canon 1014 XL-S — Super 8</option><option value="IMAX 65mm film camera">IMAX 65mm film camera</option></select></div><div class="field"><label>Lens / glass</label><select id="imageLens"><option value="">Auto / unspecified</option><option value="Panavision Primo 70 lenses">Panavision Primo 70</option><option value="Panavision C-Series anamorphic lenses">Panavision C-Series Anamorphic</option><option value="Panavision G-Series anamorphic lenses">Panavision G-Series Anamorphic</option><option value="Panavision Ultra Speed lenses">Panavision Ultra Speed</option><option value="ARRI Signature Prime lenses">ARRI Signature Prime</option><option value="Cooke S4/i lenses">Cooke S4/i</option><option value="Cooke Panchro/i Classic lenses">Cooke Panchro/i Classic</option><option value="Zeiss Supreme Prime lenses">Zeiss Supreme Prime</option><option value="Zeiss Super Speed lenses">Zeiss Super Speed</option><option value="Leica Summilux-C lenses">Leica Summilux-C</option><option value="Canon K35 vintage cinema lenses">Canon K35 Vintage</option><option value="Hawk V-Lite anamorphic lenses">Hawk V-Lite Anamorphic</option><option value="vintage spherical cinema lenses">Vintage spherical cinema lenses</option><option value="vintage anamorphic cinema lenses">Vintage anamorphic cinema lenses</option><option value="macro cinema lens">Macro cinema lens</option></select></div></div></div>
+      <div class="card"><h3>Model-sensitive constraints</h3><div class="field"><label>Negative / avoid</label><textarea id="imageNegative" rows="4" placeholder="text, duplicate limbs, plastic skin..."></textarea></div><div class="field"><label>Extra instruction</label><textarea id="imageExtra" rows="3" placeholder="Exact wardrobe, typography, reference usage, continuity, etc."></textarea></div><div class="autoNote" id="imageBehaviorNote"></div></div>
     </div>
+    <div class="editorCard"><div class="editorHead"><span>Model-optimized final prompt</span><div class="mini"><button class="btn small" data-copy="imageOutput">Copy</button></div></div><textarea id="imageOutput" class="editor outputEditor"></textarea><div class="counter" id="imageCounter">0 characters</div></div>
+  </section>
 
-    <div class="panel" style="margin-top:16px">
-      <div class="sectionTitle"><div><h3 style="margin:0;font-size:18px">@ Elements</h3><p>Click to insert into the active field.</p></div></div>
-      <div class="tokens" id="tokenList"></div>
-      <div class="tokenAdd">
-        <select id="newTokenType">
-          <option value="ch">@ch</option>
-          <option value="loc">@loc</option>
-          <option value="prop">@prop</option>
-          <option value="style">@style</option>
-          <option value="ref">@ref</option>
-        </select>
-        <input id="newTokenName" placeholder="cyber_knight" />
-        <button class="btn" id="addTokenBtn">+</button>
-      </div>
-      <div class="stickyNote">Use custom tokens like <b>@ch_tombhand</b>, <b>@loc_abandoned_hospital</b>, or <b>@style_ps1_cinematic</b>.</div>
+  <section id="videoMode" class="hidden">
+    <div class="modeGrid">
+      <div class="card"><h3>Video setup</h3><div class="field"><label>Overall scene / action</label><textarea id="videoIdea" rows="5" placeholder="Describe the overall action, characters, location and visual intent..."></textarea></div><div class="inline"><div class="field"><label>Input type</label><select id="videoInputType"><option value="text">Text to Video</option><option value="image">Image to Video</option></select></div><div class="field"><label>Total duration</label><select id="videoDuration"><option value="4">4 sec</option><option value="5">5 sec</option><option value="6">6 sec</option><option value="8">8 sec</option><option value="10" selected>10 sec</option><option value="12">12 sec</option><option value="15">15 sec</option><option value="20">20 sec</option></select></div></div><div class="inline"><div class="field"><label>Shots</label><select id="videoCount"><option value="1">1 shot</option><option value="2">2 shots</option><option value="3">3 shots</option><option value="4">4 shots</option><option value="5">5 shots</option><option value="6">6 shots</option><option value="7">7 shots</option><option value="8">8 shots</option><option value="9">9 shots</option><option value="10">10 shots</option><option value="11">11 shots</option><option value="12">12 shots</option></select></div><div class="field"><label>Aspect ratio</label><select id="videoAspect"><option>16:9</option><option>9:16</option><option>1:1</option><option>4:3</option><option>2.39:1</option></select></div></div><div class="inline"><div class="field"><label>Camera</label><select id="videoCamera"><option value="">Auto / unspecified</option><option value="Panavision Millennium DXL2">Panavision Millennium DXL2</option><option value="Panavision Panaflex Millennium XL2 35mm film camera">Panavision Panaflex Millennium XL2 — 35mm film</option><option value="ARRI Alexa 35">ARRI Alexa 35</option><option value="ARRI Alexa Mini LF">ARRI Alexa Mini LF</option><option value="ARRI Alexa 65">ARRI Alexa 65</option><option value="ARRICAM LT 35mm film camera">ARRICAM LT — 35mm film</option><option value="ARRIFLEX 435 35mm film camera">ARRIFLEX 435 — 35mm film</option><option value="ARRIFLEX 416 16mm film camera">ARRIFLEX 416 — 16mm film</option><option value="RED V-Raptor XL">RED V-Raptor XL</option><option value="RED Komodo-X">RED Komodo-X</option><option value="Sony VENICE 2">Sony VENICE 2</option><option value="Sony FX9">Sony FX9</option><option value="Blackmagic URSA Cine 12K">Blackmagic URSA Cine 12K</option><option value="Aaton XTR Prod 16mm film camera">Aaton XTR Prod — 16mm film</option><option value="Bolex H16 16mm film camera">Bolex H16 — 16mm film</option><option value="Canon 1014 XL-S Super 8 film camera">Canon 1014 XL-S — Super 8</option><option value="IMAX 65mm film camera">IMAX 65mm film camera</option></select></div><div class="field"><label>Lens / glass</label><select id="videoLens"><option value="">Auto / unspecified</option><option value="Panavision Primo 70 lenses">Panavision Primo 70</option><option value="Panavision C-Series anamorphic lenses">Panavision C-Series Anamorphic</option><option value="Panavision G-Series anamorphic lenses">Panavision G-Series Anamorphic</option><option value="Panavision Ultra Speed lenses">Panavision Ultra Speed</option><option value="ARRI Signature Prime lenses">ARRI Signature Prime</option><option value="Cooke S4/i lenses">Cooke S4/i</option><option value="Cooke Panchro/i Classic lenses">Cooke Panchro/i Classic</option><option value="Zeiss Supreme Prime lenses">Zeiss Supreme Prime</option><option value="Zeiss Super Speed lenses">Zeiss Super Speed</option><option value="Leica Summilux-C lenses">Leica Summilux-C</option><option value="Canon K35 vintage cinema lenses">Canon K35 Vintage</option><option value="Hawk V-Lite anamorphic lenses">Hawk V-Lite Anamorphic</option><option value="vintage spherical cinema lenses">Vintage spherical cinema lenses</option><option value="vintage anamorphic cinema lenses">Vintage anamorphic cinema lenses</option><option value="macro cinema lens">Macro cinema lens</option></select></div></div></div>
+      <div class="card"><h3>Motion / sound</h3><div class="field"><label>Continuity & physics</label><textarea id="videoContinuity" rows="4" placeholder="Stable identity, coherent screen direction, realistic cloth and body motion..."></textarea></div><div class="field"><label>Audio / dialogue (when supported)</label><textarea id="videoAudio" rows="3" placeholder="Ambient rain, footsteps, dialogue, music cue..."></textarea></div><div class="autoNote" id="videoBehaviorNote"></div></div>
     </div>
+    <div class="shotList" id="videoShots"></div>
+    <div class="editorCard"><div class="editorHead"><span>Model-optimized final video prompt</span><div class="mini"><button class="btn small" data-copy="videoOutput">Copy</button></div></div><textarea id="videoOutput" class="editor outputEditor"></textarea><div class="counter" id="videoCounter">0 characters</div></div>
+  </section>
 
-    <div class="panel" style="margin-top:16px">
-      <div class="sectionTitle"><div><h3 style="margin:0;font-size:18px">Model Manual</h3><p id="manualModeLabel">Image</p></div></div>
-      <div class="field">
-        <label for="globalModel">Target Model</label>
-        <select id="globalModel" class="select"></select>
-      </div>
-      <div id="manualHint" class="hint" style="margin-top:10px"></div>
-      <div class="footerNote" id="manualTag"></div>
+  <section id="storyboardMode" class="hidden">
+    <div class="modeGrid">
+      <div class="card"><h3>Storyboard setup</h3><div class="field"><label>Overall story / scene</label><textarea id="storyIdea" rows="5" placeholder="Describe the scene, characters, location and narrative beat shared by the sequence..."></textarea></div><div class="inline"><div class="field"><label>Number of shots</label><select id="storyCount"><option value="2">2 shots</option><option value="3">3 shots</option><option value="4">4 shots</option><option value="5">5 shots</option><option value="6" selected>6 shots</option><option value="7">7 shots</option><option value="8">8 shots</option><option value="9">9 shots</option><option value="10">10 shots</option><option value="11">11 shots</option><option value="12">12 shots</option></select></div><div class="field"><label>Aspect ratio</label><select id="storyAspect"><option>16:9</option><option>9:16</option><option>1:1</option><option>4:3</option><option>2.39:1</option></select></div></div><div class="inline"><div class="field"><label>Camera</label><select id="storyCamera"><option value="">Auto / unspecified</option><option value="Panavision Millennium DXL2">Panavision Millennium DXL2</option><option value="Panavision Panaflex Millennium XL2 35mm film camera">Panavision Panaflex Millennium XL2 — 35mm film</option><option value="ARRI Alexa 35">ARRI Alexa 35</option><option value="ARRI Alexa Mini LF">ARRI Alexa Mini LF</option><option value="ARRI Alexa 65">ARRI Alexa 65</option><option value="ARRICAM LT 35mm film camera">ARRICAM LT — 35mm film</option><option value="ARRIFLEX 435 35mm film camera">ARRIFLEX 435 — 35mm film</option><option value="ARRIFLEX 416 16mm film camera">ARRIFLEX 416 — 16mm film</option><option value="RED V-Raptor XL">RED V-Raptor XL</option><option value="RED Komodo-X">RED Komodo-X</option><option value="Sony VENICE 2">Sony VENICE 2</option><option value="Sony FX9">Sony FX9</option><option value="Blackmagic URSA Cine 12K">Blackmagic URSA Cine 12K</option><option value="Aaton XTR Prod 16mm film camera">Aaton XTR Prod — 16mm film</option><option value="Bolex H16 16mm film camera">Bolex H16 — 16mm film</option><option value="Canon 1014 XL-S Super 8 film camera">Canon 1014 XL-S — Super 8</option><option value="IMAX 65mm film camera">IMAX 65mm film camera</option></select></div><div class="field"><label>Lens / glass</label><select id="storyLens"><option value="">Auto / unspecified</option><option value="Panavision Primo 70 lenses">Panavision Primo 70</option><option value="Panavision C-Series anamorphic lenses">Panavision C-Series Anamorphic</option><option value="Panavision G-Series anamorphic lenses">Panavision G-Series Anamorphic</option><option value="Panavision Ultra Speed lenses">Panavision Ultra Speed</option><option value="ARRI Signature Prime lenses">ARRI Signature Prime</option><option value="Cooke S4/i lenses">Cooke S4/i</option><option value="Cooke Panchro/i Classic lenses">Cooke Panchro/i Classic</option><option value="Zeiss Supreme Prime lenses">Zeiss Supreme Prime</option><option value="Zeiss Super Speed lenses">Zeiss Super Speed</option><option value="Leica Summilux-C lenses">Leica Summilux-C</option><option value="Canon K35 vintage cinema lenses">Canon K35 Vintage</option><option value="Hawk V-Lite anamorphic lenses">Hawk V-Lite Anamorphic</option><option value="vintage spherical cinema lenses">Vintage spherical cinema lenses</option><option value="vintage anamorphic cinema lenses">Vintage anamorphic cinema lenses</option><option value="macro cinema lens">Macro cinema lens</option></select></div></div></div>
+      <div class="card"><h3>Continuity</h3><div class="field"><label>Global visual continuity</label><textarea id="storyContinuity" rows="5" placeholder="Keep face, wardrobe, location geography, time of day, lighting and palette consistent across every frame..."></textarea></div><div class="autoNote" id="storyBehaviorNote"></div></div>
     </div>
-  </aside>
+    <div class="shotList" id="storyShots"></div>
+    <div class="editorCard"><div class="editorHead"><span>Model-optimized storyboard prompt</span><div class="mini"><button class="btn small" data-copy="storyOutput">Copy</button></div></div><textarea id="storyOutput" class="editor outputEditor"></textarea><div class="counter" id="storyCounter">0 characters</div></div>
+  </section>
+</main>
 
-  <main class="workspace">
-    <section class="panel modePanel" id="panel-image">
-      <div class="sectionTitle"><div><h2>Image Prompt</h2><p>Model-aware image prompting with camera, lens, style, and constraints.</p></div><span class="badge">Single image mode</span></div>
-      <div class="grid4">
-        <div class="field"><label>Purpose</label><select id="imagePurpose"><option>hero image</option><option>concept art</option><option>editorial still</option><option>product render</option><option>movie still</option><option>advertising image</option><option>portrait</option><option>key art</option></select></div>
-        <div class="field"><label>Aspect Ratio</label><select id="imageAspect"><option>1:1</option><option>16:9</option><option>9:16</option><option>4:5</option><option>3:2</option><option>4:3</option><option>21:9</option></select></div>
-        <div class="field"><label>Camera</label><select id="imageCamera"></select></div>
-        <div class="field"><label>Lens</label><select id="imageLens"></select></div>
-      </div>
-      <div class="stack" style="margin-top:12px">
-        <div class="field"><label>Main Idea</label><textarea id="imageIdea" class="editor" placeholder="Describe the scene, subject, action, style, or concept."></textarea></div>
-        <div class="grid2">
-          <div class="field"><label>Extra Direction</label><textarea id="imageExtra" class="smallArea" placeholder="Lighting, art direction, mood, palette, realism level, etc."></textarea></div>
-          <div class="field"><label>Negative / Constraints</label><textarea id="imageNegative" class="smallArea" placeholder="No extra fingers, no text, no low quality, etc."></textarea></div>
-        </div>
-        <div class="field"><label>Compiled Output</label><textarea id="imageOutput" class="editor output" readonly></textarea></div>
-      </div>
-      <div class="outputActions"><button class="btn" data-copy="imageOutput">Copy</button></div>
-    </section>
-
-    <section class="panel modePanel hidden" id="panel-video">
-      <div class="sectionTitle"><div><h2>Video Prompt</h2><p>Timed shot planning for multi-shot video generation.</p></div><span class="badge">Text-to-video / image-to-video</span></div>
-      <div class="grid4">
-        <div class="field"><label>Workflow</label><select id="videoWorkflow"><option value="text-to-video">Text-to-video</option><option value="image-to-video">Image-to-video</option></select></div>
-        <div class="field"><label>Total Duration (s)</label><input id="videoDuration" type="number" min="1" max="180" value="10" /></div>
-        <div class="field"><label>Shot Count</label><input id="videoShots" type="number" min="1" max="12" value="4" /></div>
-        <div class="field"><label>Global Style</label><select id="videoStyle"><option>photorealistic cinematic</option><option>low poly PS1</option><option>low poly N64</option><option>anime</option><option>2D animation</option><option>epic dark fantasy retro film</option><option>fashion editorial</option></select></div>
-      </div>
-      <div class="field" style="margin-top:12px"><label>Overall Video Premise</label><textarea id="videoPremise" class="smallArea" placeholder="Describe the whole sequence, subject, and intent."></textarea></div>
-      <div class="cardList" id="videoShotsWrap"></div>
-      <div class="field" style="margin-top:12px"><label>Compiled Output</label><textarea id="videoOutput" class="editor output" readonly></textarea></div>
-      <div class="outputActions"><button class="btn" data-copy="videoOutput">Copy</button></div>
-    </section>
-
-    <section class="panel modePanel hidden" id="panel-storyboard">
-      <div class="sectionTitle"><div><h2>Storyboard Prompt</h2><p>Image storyboard compiler with a fixed number of separately detailed shots.</p></div><span class="badge">Image sequence mode</span></div>
-      <div class="grid4">
-        <div class="field"><label>Shot Count</label><input id="boardShots" type="number" min="2" max="16" value="6" /></div>
-        <div class="field"><label>Aspect Ratio</label><select id="boardAspect"><option>16:9</option><option>9:16</option><option>1:1</option><option>4:5</option><option>3:2</option></select></div>
-        <div class="field"><label>Visual Style</label><select id="boardStyle"><option>photorealistic cinematic</option><option>anime</option><option>2D animation</option><option>PS2 cinematic</option><option>PS1 low poly</option><option>epic dark fantasy retro film</option></select></div>
-        <div class="field"><label>Camera Package</label><select id="boardCamera"></select></div>
-      </div>
-      <div class="field" style="margin-top:12px"><label>Overall Premise</label><textarea id="boardPremise" class="smallArea" placeholder="Describe the scene or sequence. The storyboard will expand this into shot-by-shot text."></textarea></div>
-      <div class="cardList" id="boardShotsWrap"></div>
-      <div class="field" style="margin-top:12px"><label>Compiled Output</label><textarea id="boardOutput" class="editor output" readonly></textarea></div>
-      <div class="outputActions"><button class="btn" data-copy="boardOutput">Copy</button></div>
-    </section>
-
-    <section class="panel modePanel hidden" id="panel-sheet">
-      <div class="sectionTitle"><div><h2>Sheet Builder</h2><p>Character sheets, pose grids, asset sheets, prop sheets, vehicle sheets, and location blueprint sets.</p></div><span class="badge">Reference sheet mode</span></div>
-      <div class="grid4">
-        <div class="field"><label>Sheet Type</label><select id="sheetType"></select></div>
-        <div class="field"><label>Style Family</label><select id="sheetStyle"></select></div>
-        <div class="field"><label>Background</label><select id="sheetBg"><option value="auto">Auto</option><option value="white">White</option><option value="black">Black</option><option value="neutral">Neutral gray</option></select></div>
-        <div class="field"><label>Aspect Ratio</label><select id="sheetAspect"><option>4:5</option><option>1:1</option><option>16:9</option><option>3:2</option></select></div>
-      </div>
-      <div class="grid2" style="margin-top:12px">
-        <div class="field"><label>Subject / Asset Name</label><input id="sheetSubject" type="text" placeholder="e.g. tough badass character / gummy candy / jitte / truck / diner interior" /></div>
-        <div class="field"><label>Reference Notes</label><input id="sheetRefs" type="text" placeholder="e.g. use uploaded reference image / Image 1 front, Image 2 top..." /></div>
-      </div>
-      <div class="grid2" style="margin-top:12px">
-        <div class="field"><label>Core Description</label><textarea id="sheetDescription" class="smallArea" placeholder="Describe the subject. The template will do the rest."></textarea></div>
-        <div class="field"><label>Extra Details / Constraints</label><textarea id="sheetExtra" class="smallArea" placeholder="Specific materials, reflections, do not invent details, keep exact topology, etc."></textarea></div>
-      </div>
-      <div class="grid3" style="margin-top:12px">
-        <div class="field"><label>Sheet Detail Preset</label><select id="sheetDetail"><option>standard reference sheet</option><option>pose-heavy sheet</option><option>close-up heavy sheet</option><option>blueprint-style coverage</option><option>studio catalog layout</option></select></div>
-        <div class="field"><label>Include Labels</label><select id="sheetLabels"><option value="yes">Yes</option><option value="no">No</option></select></div>
-        <div class="field"><label>Output Focus</label><select id="sheetFocus"><option>exact likeness and consistency</option><option>shape language and turnaround</option><option>materials and textures</option><option>game-ready reference</option><option>set layout consistency</option></select></div>
-      </div>
-      <div class="field" style="margin-top:12px"><label>Compiled Output</label><textarea id="sheetOutput" class="editor output" readonly></textarea></div>
-      <div class="outputActions"><button class="btn" data-copy="sheetOutput">Copy</button></div>
-    </section>
-  </main>
-
-  <aside class="inspector">
-    <div class="inspectorHead">
-      <div class="label">Search prompt controls</div>
-      <input id="controlSearch" type="text" placeholder="Search camera, lens, style, movement, lighting..." />
-    </div>
-    <div class="inspectorScroll">
-      <div class="small" style="margin-bottom:12px">Everything below the search bar scrolls inside this panel.</div>
-      <div id="paramWrap"></div>
-    </div>
-  </aside>
+<aside class="inspector">
+  <div class="searchWrap"><div class="label">Prompt controls</div><input id="controlSearch" class="search" placeholder="Search camera, lens, framing, style..."></div>
+  <div id="paramWrap" class="paramWrap"></div>
+  <div class="notice">Clicking a control inserts it into the active idea/shot. The final output is then re-written using the selected model’s prompting profile.</div>
+</aside>
 </div>
+<div class="toast" id="toast">Copied</div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]||m));
+const MODEL_PROFILES={
+  image:[
+    {id:'openai-image',name:'OpenAI Image',tag:'Natural-language image direction',hint:'Best with a clear visual brief rather than keyword soup.',manual:'Use 1–3 clear sentences: purpose/subject + action + environment + visual style. Add framing, lighting and constraints only when they matter.',negative:'sentence',format:'openai'},
+    {id:'nano-banana-pro',name:'Nano Banana Pro / Gemini Image',tag:'Detailed instruction + references',hint:'Strong for detailed art direction, reference-driven work and iterative edits.',manual:'Write explicit natural-language instructions. Be precise about subject, scene, camera, layout, text and reference continuity. @ elements remain visible as reference labels.',negative:'sentence',format:'gemini'},
+    {id:'nano-banana-2',name:'Nano Banana 2',tag:'Natural-language visual brief',hint:'A versatile Gemini image profile for direct generation and edits.',manual:'Use descriptive sentences with concrete subject, composition, environment, lighting and style. Keep important exact details explicit.',negative:'sentence',format:'gemini'},
+    {id:'midjourney',name:'Midjourney',tag:'Compact visual phrases + parameters',hint:'Short, specific visual phrases are favored; parameters belong at the end.',manual:'Lead with the subject and medium, then environment, lighting, color, mood and composition. Keep it compact. Aspect ratio is converted to --ar.',negative:'mj',format:'midjourney'},
+    {id:'flux',name:'FLUX',tag:'Descriptive scene paragraph',hint:'Use direct visual description with explicit composition/material/light detail.',manual:'Describe what is visible, then composition/camera, materials, lighting and style. Prefer concrete visual language over meta-instructions.',negative:'separate',format:'flux'},
+    {id:'sdxl',name:'Stable Diffusion / SDXL',tag:'Positive + negative prompt blocks',hint:'Works well with a dense positive description and a distinct negative block.',manual:'Use comma-separated visual concepts for the positive prompt. Put unwanted artifacts in a separate Negative prompt section.',negative:'separate',format:'sdxl'},
+    {id:'runway-image',name:'Runway Gen-4 Image',tag:'Full-sentence visual description',hint:'Descriptive, positive language; negative prompts are not useful for this profile.',manual:'Use descriptive full sentences for subject, scene, composition, lighting, color, style, focus, angle and mood. Rewrite negatives into positive desired states when possible.',negative:'omit',format:'runwayImage'},
+    {id:'ideogram',name:'Ideogram',tag:'Composition + typography aware',hint:'Good when layout or readable text is important.',manual:'State the image type, subject, composition and style. Put exact visible text in quotation marks and specify placement/type treatment.',negative:'sentence',format:'ideogram'},
+    {id:'recraft',name:'Recraft',tag:'Design / illustration brief',hint:'Useful for design-system, vector, illustration and branded visual prompts.',manual:'Describe asset type first, then subject, composition, shape language, palette, finish and background requirements.',negative:'sentence',format:'recraft'},
+    {id:'firefly',name:'Adobe Firefly',tag:'Subject + style + composition',hint:'A clean commercial-art-direction profile.',manual:'Describe subject and scene first, then style, lighting, color, composition and camera. Keep instructions visually concrete.',negative:'sentence',format:'firefly'}
+  ],
+  video:[
+    {id:'kling',name:'Kling',tag:'Action + camera + temporal motion',hint:'Prioritize visible subject motion, camera motion and physical behavior.',manual:'Describe subject/action first, then camera motion, environment motion, lighting/style and continuity. For multiple shots use explicit time blocks.',format:'kling'},
+    {id:'veo',name:'Veo 3.1',tag:'Cinematography + Subject + Action + Context + Style',hint:'Structured cinematic direction; audio can be specified separately.',manual:'Use the five-part Veo structure: cinematography, subject, action, context, style/ambiance. Add sound effects, ambience or dialogue as separate audio sentences.',format:'veo'},
+    {id:'runway-video',name:'Runway Gen-4.5',tag:'Direct positive motion prompting',hint:'Text-to-video describes visuals + motion; image-to-video should focus mostly on motion.',manual:'Use clear, direct, positive language. For image-to-video, avoid re-describing the source image and focus on subject motion, camera motion and temporal progression.',format:'runwayVideo'},
+    {id:'sora2',name:'Sora 2 / OpenAI Video',tag:'Descriptive cinematic sequence',hint:'Use explicit scene, action, camera choreography, physics and audiovisual intent.',manual:'Describe the scene as a coherent temporal sequence. State camera behavior, important physical interactions, pacing and sound when relevant.',format:'sora'},
+    {id:'seedance',name:'Seedance',tag:'Timed multi-shot direction',hint:'Works well with explicit shot order, action and continuity cues.',manual:'For multishot prompts, state each shot in sequence with duration, framing, movement and visible action. Keep identity and screen direction explicit.',format:'seedance'},
+    {id:'hailuo',name:'Hailuo / MiniMax Video',tag:'Concise cinematic motion',hint:'Keep actions concrete and avoid packing too many simultaneous changes into one short shot.',manual:'Use concise subject action + camera movement + environment + atmosphere. Break complex action into separate shots.',format:'hailuo'},
+    {id:'luma',name:'Luma Dream Machine / Ray',tag:'Motion-first cinematic description',hint:'Concrete subject and camera motion with readable visual intent.',manual:'Describe the visible scene and the motion that should evolve through time. Keep camera motion singular and clear per shot.',format:'luma'},
+    {id:'higgsfield',name:'Higgsfield',tag:'Camera choreography + stylized action',hint:'Strong emphasis on camera behavior and punchy cinematic movement.',manual:'Lead with the shot/camera move, then subject action and scene. Use one strong movement idea per shot when possible.',format:'higgsfield'},
+    {id:'pika',name:'Pika',tag:'Simple action / transformation direction',hint:'Useful for concise motion, effects and transformation beats.',manual:'Describe the main visible action or transformation, then camera movement and style. Keep each shot focused on one readable beat.',format:'pika'}
+  ]
+};
+const STORY_MODELS=MODEL_PROFILES.image;
+const CAMERA_BODIES=[
+  ['','Auto / unspecified'],
+  ['Panavision Millennium DXL2','Panavision Millennium DXL2'],
+  ['Panavision Panaflex Millennium XL2 35mm film camera','Panavision Panaflex Millennium XL2 — 35mm film'],
+  ['ARRI Alexa 35','ARRI Alexa 35'],
+  ['ARRI Alexa Mini LF','ARRI Alexa Mini LF'],
+  ['ARRI Alexa 65','ARRI Alexa 65'],
+  ['ARRICAM LT 35mm film camera','ARRICAM LT — 35mm film'],
+  ['ARRIFLEX 435 35mm film camera','ARRIFLEX 435 — 35mm film'],
+  ['ARRIFLEX 416 16mm film camera','ARRIFLEX 416 — 16mm film'],
+  ['RED V-Raptor XL','RED V-Raptor XL'],
+  ['RED Komodo-X','RED Komodo-X'],
+  ['Sony VENICE 2','Sony VENICE 2'],
+  ['Sony FX9','Sony FX9'],
+  ['Blackmagic URSA Cine 12K','Blackmagic URSA Cine 12K'],
+  ['Aaton XTR Prod 16mm film camera','Aaton XTR Prod — 16mm film'],
+  ['Bolex H16 16mm film camera','Bolex H16 — 16mm film'],
+  ['Canon 1014 XL-S Super 8 film camera','Canon 1014 XL-S — Super 8'],
+  ['IMAX 65mm film camera','IMAX 65mm film camera']
+];
+const LENS_PACKAGES=[
+  ['','Auto / unspecified'],
+  ['Panavision Primo 70 lenses','Panavision Primo 70'],
+  ['Panavision C-Series anamorphic lenses','Panavision C-Series Anamorphic'],
+  ['Panavision G-Series anamorphic lenses','Panavision G-Series Anamorphic'],
+  ['Panavision Ultra Speed lenses','Panavision Ultra Speed'],
+  ['ARRI Signature Prime lenses','ARRI Signature Prime'],
+  ['Cooke S4/i lenses','Cooke S4/i'],
+  ['Cooke Panchro/i Classic lenses','Cooke Panchro/i Classic'],
+  ['Zeiss Supreme Prime lenses','Zeiss Supreme Prime'],
+  ['Zeiss Super Speed lenses','Zeiss Super Speed'],
+  ['Leica Summilux-C lenses','Leica Summilux-C'],
+  ['Canon K35 vintage cinema lenses','Canon K35 Vintage'],
+  ['Hawk V-Lite anamorphic lenses','Hawk V-Lite Anamorphic'],
+  ['vintage spherical cinema lenses','Vintage spherical cinema lenses'],
+  ['vintage anamorphic cinema lenses','Vintage anamorphic cinema lenses'],
+  ['macro cinema lens','Macro cinema lens']
+];
+const GROUPS=[
+ ['Camera',['ARRI Alexa 35','ARRI Alexa Mini LF','Sony VENICE 2','RED V-Raptor','Blackmagic URSA Cine','Panavision film camera','16mm film camera','Super 8 camera','35mm film camera','large-format cinema camera']],
+ ['Lens',['18mm ultra-wide lens','24mm wide-angle lens','28mm lens','35mm lens','40mm lens','50mm prime lens','65mm portrait lens','85mm portrait lens','100mm macro lens','135mm telephoto lens','anamorphic lens','vintage spherical lens','Cooke-style lens rendering']],
+ ['Aperture / DOF',['f/1.4 shallow depth of field','f/2 shallow depth of field','f/2.8 cinematic depth of field','f/4 balanced depth of field','f/8 deep focus','razor-thin depth of field','deep focus composition','soft background bokeh']],
+ ['Framing',['extreme close-up','close-up','medium close-up','medium shot','medium-wide shot','cowboy shot','full body shot','wide shot','extreme wide shot','establishing shot','two-shot','over-the-shoulder shot','insert shot','detail shot','POV shot']],
+ ['Angle',['eye-level angle','low angle','high angle','bird’s-eye view','worm’s-eye view','Dutch angle','top-down angle','ground-level angle','profile angle','three-quarter angle','rear three-quarter angle']],
+ ['Camera movement',['locked-off camera','slow push-in','slow pull-back','dolly-in','dolly-out','lateral tracking shot','handheld camera','shoulder-mounted camera','Steadicam follow','orbiting camera','crane up','crane down','tilt up','tilt down','pan left','pan right','whip pan','rack focus','snap zoom','slow zoom']],
+ ['Lighting',['soft natural light','hard directional light','golden-hour sunlight','blue-hour ambience','moonlit night','neon practical lighting','candlelight','chiaroscuro lighting','Rembrandt lighting','rim light','backlit silhouette','volumetric light','foggy diffused light','fluorescent overhead light','sodium-vapor streetlight','high-contrast noir lighting']],
+ ['Visual style',['cinematic realism','gritty realism','retro dark fantasy','1970s European cinema','1980s genre film','1990s action cinema','Y2K music video','neo-noir','giallo-inspired','surreal horror','dark sci-fi','brutalist futurism','editorial fashion','luxury campaign','documentary realism','dreamlike romanticism']],
+ ['Art / medium',['live action','photorealistic','oil painting','gouache illustration','watercolor','charcoal drawing','graphite animation sketch','ink illustration','manga art','anime cel animation','pixel art','PSX low-poly','claymation','stop motion','miniature photography','3D CGI','matte painting','pulp illustration']],
+ ['Film / texture',['clean digital cinema','35mm film grain','16mm grain','Super 8 grain','Kodak Vision3 look','Kodachrome-like color','bleach bypass','cross-processed film','faded print','VHS texture','CRT scanlines','soft halation','subtle gate weave','light leaks','film bloom']],
+ ['Mood',['ominous','melancholic','romantic','mysterious','elegant','violent','claustrophobic','dreamlike','hypnotic','sacred','decadent','lonely','energetic','playful','apocalyptic','uncanny']],
+ ['Color palette',['desaturated earth tones','deep blacks and warm amber','cold cyan and steel blue','blood red accents','muted pastel palette','high-saturation neon','monochrome black and white','sepia tones','restrained teal and orange','acid green highlights','lavender shadows','gold and crimson palette']],
+ ['Quality / finish',['high detail','fine material detail','natural skin texture','realistic fabric texture','complex environment detail','cinematic color grade','physically plausible lighting','subtle motion blur','sharp subject separation','soft highlight rolloff','controlled contrast','production-design rich']],
+ ['Composition',['centered composition','symmetrical composition','rule of thirds','negative space','deep layered composition','foreground framing','leading lines','compressed perspective','wide spatial depth','silhouette composition','off-center subject','strong diagonal composition']],
+ ['Motion / physics',['natural body motion','realistic cloth physics','realistic hair motion','consistent character identity','continuous screen direction','coherent spatial continuity','smooth cinematic motion','fast kinetic action','slow deliberate movement','subtle handheld shake','precise choreographed action']]
+];
+const SHOTS=['Extreme close-up','Close-up','Medium close-up','Medium shot','Medium-wide','Cowboy','Full body','Wide','Extreme wide','OTS','POV','Insert'];
+const ANGLES=['Eye level','Low angle','High angle','Top-down','Dutch','Ground level','Profile','Three-quarter','Rear 3/4'];
+const LENSES=['18mm','24mm','28mm','35mm','40mm','50mm','65mm','85mm','100mm','135mm','Anamorphic'];
+const MOVES=['Locked-off','Push-in','Pull-back','Track left','Track right','Handheld','Steadicam follow','Orbit','Crane up','Crane down','Tilt up','Tilt down','Pan left','Pan right','Whip pan','Rack focus'];
+let mode='image',activeEditor=null,selectedModelId='openai-image';
+const MEMORY_STORE={};
+function storeGet(key,fallback='[]'){try{const v=window.localStorage.getItem(key);return v===null?fallback:v}catch(e){return Object.prototype.hasOwnProperty.call(MEMORY_STORE,key)?MEMORY_STORE[key]:fallback}}
+function storeSet(key,value){try{window.localStorage.setItem(key,value)}catch(e){MEMORY_STORE[key]=value}}
+function safeArray(key){try{const v=JSON.parse(storeGet(key,'[]'));return Array.isArray(v)?v:[]}catch(e){return []}}
+function fillSelect(id,items){const el=$(id);if(!el)return;el.innerHTML='';items.forEach(([value,label])=>{const o=document.createElement('option');o.value=value;o.textContent=label;el.appendChild(o)})}
+function populateCameraLens(){['imageCamera','videoCamera','storyCamera'].forEach(id=>fillSelect(id,CAMERA_BODIES));['imageLens','videoLens','storyLens'].forEach(id=>fillSelect(id,LENS_PACKAGES))}
+
+function init(){
+  $('videoCount').innerHTML='';$('storyCount').innerHTML='';
+  for(let i=1;i<=12;i++){let o=document.createElement('option');o.value=i;o.textContent=i+' shot'+(i===1?'':'s');$('videoCount').appendChild(o)}
+  for(let i=2;i<=12;i++){let o=document.createElement('option');o.value=i;o.textContent=i+' shots';$('storyCount').appendChild(o)}
+  $('videoCount').value='1';$('storyCount').value='6';
+  populateCameraLens();
+  bind();renderGroups();setMode('image');
+  renderElements();renderSaved();
+}
+function bind(){
+  document.querySelectorAll('.modeBtn').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+  $('modeSelect').addEventListener('change',e=>setMode(e.target.value));
+  $('modelSelect').addEventListener('change',()=>{selectedModelId=$('modelSelect').value;updateManual();compileAll()});
+  ['imageIdea','imageNegative','imageExtra','imageAspect','imagePurpose','imageCamera','imageLens'].forEach(id=>{['input','change'].forEach(ev=>$(id).addEventListener(ev,compileImage))});
+  ['videoIdea','videoInputType','videoDuration','videoCount','videoAspect','videoCamera','videoLens','videoContinuity','videoAudio'].forEach(id=>{['input','change'].forEach(ev=>$(id).addEventListener(ev,()=>{if(id==='videoCount'||id==='videoDuration')renderVideoShots();compileVideo()}))});
+  ['storyIdea','storyCount','storyAspect','storyCamera','storyLens','storyContinuity'].forEach(id=>{['input','change'].forEach(ev=>$(id).addEventListener(ev,()=>{if(id==='storyCount')renderStoryShots();compileStory()}))});
+  ['imageIdea','imageNegative','imageExtra','videoIdea','videoContinuity','videoAudio','storyIdea','storyContinuity'].forEach(id=>$(id).addEventListener('focus',()=>setActive($(id),labelFor(id))));
+  $('controlSearch').addEventListener('input',renderGroups);
+  $('addElementBtn').addEventListener('click',addElement);$('elementName').addEventListener('keydown',e=>{if(e.key==='Enter')addElement()});
+  $('copyBtn').addEventListener('click',()=>copyText(currentOutput().value));$('clearBtn').addEventListener('click',clearCurrent);$('saveBtn').addEventListener('click',savePreset);
+  document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>copyText($(b.dataset.copy).value)));
+}
+function labelFor(id){return ({imageIdea:'Image Idea',imageNegative:'Image Avoid',imageExtra:'Image Extra',videoIdea:'Video Idea',videoContinuity:'Video Continuity',videoAudio:'Video Audio',storyIdea:'Storyboard Idea',storyContinuity:'Storyboard Continuity'})[id]||'Prompt'}
+function setMode(next){
+  mode=next;$('modeSelect').value=next;document.querySelectorAll('.modeBtn').forEach(b=>b.classList.toggle('active',b.dataset.mode===next));
+  $('imageMode').classList.toggle('hidden',next!=='image');$('videoMode').classList.toggle('hidden',next!=='video');$('storyboardMode').classList.toggle('hidden',next!=='storyboard');
+  const h={image:['Image Prompt','Write the visual idea once; the target model changes how the final prompt is structured.'],video:['Video Prompt','Create a single shot or a timed multi-shot sequence with model-specific video prompting.'],storyboard:['Storyboard Prompt','Build an exact shot count, then format the storyboard for the selected image model.']}[next];$('modeTitle').textContent=h[0];$('modeDesc').textContent=h[1];
+  rebuildModels();
+  if(next==='image')setActive($('imageIdea'),'Image Idea');
+  if(next==='video'){renderVideoShots();setActive($('videoIdea'),'Video Idea')}
+  if(next==='storyboard'){renderStoryShots();setActive($('storyIdea'),'Storyboard Idea')}
+  compileAll();
+}
+function profiles(){return mode==='video'?MODEL_PROFILES.video:STORY_MODELS}
+function rebuildModels(){
+  const list=profiles()||[];if(!list.length)return;const previous=selectedModelId,frag=document.createDocumentFragment();
+  list.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;frag.appendChild(o)});
+  const select=$('modelSelect');select.replaceChildren(frag);
+  const valid=list.some(p=>p.id===previous);selectedModelId=valid?previous:list[0].id;select.value=selectedModelId;updateManual();
+}
+function profile(){return profiles().find(p=>p.id===$('modelSelect').value)||profiles()[0]}
+function updateManual(){const p=profile();$('modelHint').textContent=p.hint;$('manualText').textContent=p.manual;$('manualTag').textContent=p.tag;$('manualTitle').textContent=p.name+' manual';updateBehaviorNotes()}
+function updateBehaviorNotes(){
+  const p=profile();$('imageBehaviorNote').textContent=p.negative==='omit'?'This model profile avoids a negative-prompt block. The final prompt focuses on positive desired states.':p.negative==='mj'?'Avoid terms are converted to Midjourney --no syntax.':'Avoid/constraint text is adapted to this model’s output style.';
+  $('videoBehaviorNote').textContent=p.id==='runway-video'?'Image-to-video mode will strip most scene re-description and emphasize motion/camera behavior.':p.id==='veo'?'Veo output uses Cinematography → Subject/Action → Context → Style/Ambiance, with Audio separated when supplied.':'Shot structure, timing and motion wording are adapted to this video profile.';
+  $('storyBehaviorNote').textContent=p.id==='midjourney'?'Storyboard shots are kept compact and each frame receives an aspect-ratio parameter.':'The same continuity brief is carried into each separately numbered frame while preserving model-specific wording.';
+}
+function setActive(el,label){activeEditor=el;$('activeBadge').textContent='Active: '+label}
+function insertText(text){if(!activeEditor)return;const s=activeEditor.selectionStart??activeEditor.value.length,e=activeEditor.selectionEnd??activeEditor.value.length,b=activeEditor.value.slice(0,s),a=activeEditor.value.slice(e);let ins=text;if(b&&!/[\s,;:\n]$/.test(b))ins=', '+ins;if(a&&!/^[\s,;:.\n]/.test(a))ins+=', ';activeEditor.value=b+ins+a;let pos=(b+ins).length;activeEditor.focus();activeEditor.setSelectionRange(pos,pos);activeEditor.dispatchEvent(new Event('input',{bubbles:true}))}
+function renderGroups(){const q=$('controlSearch').value.trim().toLowerCase();$('paramWrap').innerHTML='';GROUPS.forEach(([title,items])=>{const m=items.filter(x=>!q||title.toLowerCase().includes(q)||x.toLowerCase().includes(q));if(!m.length)return;let d=document.createElement('div');d.className='param';d.innerHTML=`<div class="paramTitle"><b>${title}</b><span>insert</span></div><div class="chips"></div>`;m.forEach(x=>{let b=document.createElement('button');b.className='chip';b.textContent=x;b.addEventListener('click',()=>insertText(x));d.querySelector('.chips').appendChild(b)});$('paramWrap').appendChild(d)})}
+function clean(s){return String(s||'').trim().replace(/\s+/g,' ')}
+function sentence(s){s=clean(s);if(!s)return'';return /[.!?]$/.test(s)?s:s+'.'}
+function comma(parts){return parts.map(clean).filter(Boolean).join(', ')}
+function arToMJ(ar){return ar.replace(':',':')}
+function compileImage(){
+  const p=profile(),idea=clean($('imageIdea').value),extra=clean($('imageExtra').value),neg=clean($('imageNegative').value),aspect=$('imageAspect').value,purpose=$('imagePurpose').value,camera=$('imageCamera').value,lens=$('imageLens').value,cinema=comma([camera,lens]);let out='';
+  if(!idea&&!extra){$('imageOutput').value='';updateCounters();return}
+  if(p.format==='midjourney')out=comma([idea,purpose,cinema,extra])+(aspect?' --ar '+arToMJ(aspect):'')+(neg?' --no '+neg.replace(/[,;]+/g,' '):'');
+  else if(p.format==='sdxl')out='Positive prompt:\n'+comma([purpose,idea,cinema,extra])+(neg?'\n\nNegative prompt:\n'+neg:'');
+  else if(p.format==='runwayImage')out=[sentence(comma([purpose,idea])),cinema?`Captured with ${cinema}.`:'',sentence(extra),`Composition format: ${aspect}.`].filter(Boolean).join(' ');
+  else if(p.format==='gemini')out=[purpose?`Create a ${purpose}.`:'Create the image described below.',sentence(idea),cinema?`Camera and lens: ${cinema}.`:'',extra?`Additional art direction: ${sentence(extra)}`:'',`Frame: ${aspect}.`,neg?`Constraints: ${sentence(neg)}`:''].filter(Boolean).join('\n');
+  else if(p.format==='ideogram')out=[purpose?`Create a ${purpose}.`:'Create this image.',sentence(idea),cinema?`Camera look: ${cinema}.`:'',sentence(extra),`Composition: ${aspect}.`,neg?`Avoid: ${sentence(neg)}`:''].filter(Boolean).join(' ');
+  else if(p.format==='recraft')out=[`Asset: ${purpose||'finished visual'}.`,`Subject & scene: ${idea}.`,cinema?`Camera / lens look: ${cinema}.`:'',extra?`Design direction: ${extra}.`:'',`Format: ${aspect}.`,neg?`Avoid: ${neg}.`:''].filter(Boolean).join('\n');
+  else if(p.format==='flux')out=[sentence(comma([purpose,idea,cinema,extra])),`Aspect ratio ${aspect}.`,neg?`Avoid: ${sentence(neg)}`:''].filter(Boolean).join(' ');
+  else out=[purpose?`Purpose: ${purpose}.`:'',sentence(idea),cinema?`Camera / lens: ${cinema}.`:'',sentence(extra),`Aspect ratio: ${aspect}.`,neg?`Avoid: ${sentence(neg)}`:''].filter(Boolean).join(' ');
+  $('imageOutput').value=out;updateCounters();
+}
+function shotSelect(items,val){return `<select>${items.map(x=>`<option${x===val?' selected':''}>${x}</option>`).join('')}</select>`}
+function renderVideoShots(){
+  const count=+$('videoCount').value,total=+$('videoDuration').value,old=[...$('videoShots').children].map(readShot);$('videoShots').innerHTML='';let base=total/count;
+  for(let i=0;i<count;i++){let d=old[i]||{frame:i===0?'Wide':'Medium shot',angle:'Eye level',lens:i===0?'24mm':'50mm',move:i===0?'Push-in':'Handheld',desc:''};let c=document.createElement('div');c.className='shot';c.innerHTML=`<div class="shotHead"><b>Shot ${i+1}</b><span>${fmt(i*base)}–${fmt((i+1)*base)}s</span></div><div class="shotGrid"><div><label>Framing</label>${shotSelect(SHOTS,d.frame)}</div><div><label>Angle</label>${shotSelect(ANGLES,d.angle)}</div><div><label>Lens</label>${shotSelect(LENSES,d.lens)}</div><div><label>Movement</label>${shotSelect(MOVES,d.move)}</div></div><label>Visible action / motion</label><textarea rows="4" placeholder="Describe exactly what happens in this shot...">${esc(d.desc)}</textarea>`;c.querySelectorAll('select,textarea').forEach(el=>{el.addEventListener('input',compileVideo);el.addEventListener('change',compileVideo);if(el.tagName==='TEXTAREA')el.addEventListener('focus',()=>setActive(el,'Video Shot '+(i+1)))});$('videoShots').appendChild(c)}
+}
+function renderStoryShots(){
+  const count=+$('storyCount').value,old=[...$('storyShots').children].map(readShot);$('storyShots').innerHTML='';for(let i=0;i<count;i++){let d=old[i]||{frame:i===0?'Wide':'Medium shot',angle:'Eye level',lens:i===0?'24mm':'50mm',move:'Locked-off',desc:''};let c=document.createElement('div');c.className='shot';c.innerHTML=`<div class="shotHead"><b>Shot ${i+1}</b><span>Storyboard frame</span></div><div class="shotGrid"><div><label>Framing</label>${shotSelect(SHOTS,d.frame)}</div><div><label>Angle</label>${shotSelect(ANGLES,d.angle)}</div><div><label>Lens</label>${shotSelect(LENSES,d.lens)}</div><div><label>Camera</label>${shotSelect(MOVES,d.move)}</div></div><label>Frame description</label><textarea rows="4" placeholder="Subject pose/action, composition, foreground/background, exact narrative beat...">${esc(d.desc)}</textarea>`;c.querySelectorAll('select,textarea').forEach(el=>{el.addEventListener('input',compileStory);el.addEventListener('change',compileStory);if(el.tagName==='TEXTAREA')el.addEventListener('focus',()=>setActive(el,'Storyboard Shot '+(i+1)))});$('storyShots').appendChild(c)}
+}
+function readShot(c){if(!c)return null;let s=c.querySelectorAll('select');return{frame:s[0].value,angle:s[1].value,lens:s[2].value,move:s[3].value,desc:c.querySelector('textarea').value}}
+function shotPhrase(d){return `${d.frame}, ${d.angle}, ${d.lens}, ${d.move}. ${clean(d.desc)||'Define the visible action for this shot.'}`}
+function compileVideo(){
+  const p=profile(),idea=clean($('videoIdea').value),input=$('videoInputType').value,total=+$('videoDuration').value,count=+$('videoCount').value,aspect=$('videoAspect').value,camera=$('videoCamera').value,lens=$('videoLens').value,cinema=comma([camera,lens]),cont=clean($('videoContinuity').value),audio=clean($('videoAudio').value),shots=[...$('videoShots').children].map(readShot),base=total/count;let out='';
+  const timed=shots.map((d,i)=>`${fmt(i*base)}–${fmt((i+1)*base)}s — Shot ${i+1}: ${shotPhrase(d)}`);
+  if(p.format==='veo')out=[`Cinematography / format: ${aspect}, ${total}-second ${count>1?'multi-shot sequence':'shot'}.`,cinema?`Camera package: ${cinema}.`:'',idea?`Subject + action + context: ${idea}.`:'',cont?`Style, ambiance & continuity: ${cont}.`:'',count>1?timed.join('\n'):shotPhrase(shots[0]||{}),audio?`Audio: ${audio}.`:''].filter(Boolean).join('\n');
+  else if(p.format==='runwayVideo'){
+    const head=input==='image'?`Image-to-video. Focus on motion and temporal progression. ${count>1?'Timed sequence:':''}`:`Text-to-video. ${idea?sentence(idea):''}`;
+    out=[head,cinema?`Camera package: ${cinema}.`:'',input==='image'?'':idea?`Scene: ${idea}.`:'',count>1?timed.join('\n'):shotPhrase(shots[0]||{}),cont?`Motion continuity: ${cont}.`:'',audio?`Sound intent: ${audio}.`:''].filter(Boolean).join('\n');
+  } else if(p.format==='higgsfield')out=[idea?`Scene: ${idea}.`:'',cinema?`Camera package: ${cinema}.`:'',...timed.map(x=>x.replace(/Shot \d+: /,'Camera beat: ')),cont?`Continuity: ${cont}.`:'',audio?`Audio: ${audio}.`:''].filter(Boolean).join('\n');
+  else if(p.format==='kling')out=[idea?`Overall scene: ${idea}.`:'',`Duration: ${total}s. Aspect ratio: ${aspect}.`,cinema?`Camera / lens: ${cinema}.`:'',...timed,cont?`Motion / continuity constraints: ${cont}.`:'',audio?`Audio intent: ${audio}.`:''].filter(Boolean).join('\n');
+  else if(p.format==='seedance')out=[`Sequence: ${total}s, ${count} shot${count===1?'':'s'}, ${aspect}.`,idea?`Story action: ${idea}.`:'',cinema?`Camera package: ${cinema}.`:'',timed.join('\n'),cont?`Cross-shot continuity: ${cont}.`:'',audio?`Audio: ${audio}.`:''].filter(Boolean).join('\n');
+  else if(p.format==='sora')out=[idea?sentence(idea):'',`Create a coherent ${total}-second cinematic ${count>1?'sequence':'shot'} in ${aspect}.`,cinema?`Camera package: ${cinema}.`:'',timed.join('\n'),cont?`Physics, identity and continuity: ${cont}.`:'',audio?`Sound and dialogue: ${audio}.`:''].filter(Boolean).join('\n');
+  else out=[idea?`Scene: ${idea}.`:'',`Video: ${total}s, ${aspect}.`,cinema?`Camera / lens: ${cinema}.`:'',timed.join('\n'),cont?`Continuity: ${cont}.`:'',audio?`Audio: ${audio}.`:''].filter(Boolean).join('\n');
+  $('videoOutput').value=out;updateCounters();
+}
+function compileStory(){
+  const p=profile(),idea=clean($('storyIdea').value),cont=clean($('storyContinuity').value),aspect=$('storyAspect').value,camera=$('storyCamera').value,lens=$('storyLens').value,cinema=comma([camera,lens]),count=+$('storyCount').value,shots=[...$('storyShots').children].map(readShot);let lines=[];
+  if(p.format==='midjourney'){
+    lines.push(`Storyboard — exactly ${count} separate frames.`);if(idea)lines.push(`Shared premise: ${idea}`);if(cinema)lines.push(`Shared camera package: ${cinema}`);if(cont)lines.push(`Continuity bible: ${cont}`);lines.push('');shots.forEach((d,i)=>lines.push(`Shot ${i+1}: ${comma([d.frame,d.angle,d.lens,d.move,clean(d.desc)])} --ar ${arToMJ(aspect)}`));
+  }else if(p.format==='gemini'){
+    lines=[`Create a storyboard containing exactly ${count} clearly separate shots.`,`Shared scene: ${idea||'Use the shot descriptions below.'}`,cinema?`Shared camera and lens: ${cinema}`:'',cont?`Continuity requirement: ${cont}`:'',`All frames use ${aspect}.`,''];shots.forEach((d,i)=>lines.push(`Shot ${i+1}\nCamera: ${d.frame}, ${d.angle}, ${d.lens}, ${d.move}.\nFrame content: ${clean(d.desc)||'Describe this exact narrative beat in detail.'}`));
+  }else if(p.format==='sdxl'){
+    lines=[`Storyboard of exactly ${count} frames. Shared positive context: ${idea}. ${cinema?`Camera package: ${cinema}. `:''}${cont}`.trim(),''];shots.forEach((d,i)=>lines.push(`Frame ${i+1} positive prompt: ${comma([d.frame,d.angle,d.lens,d.move,d.desc])}`));
+  }else{
+    lines=[`Storyboard of exactly ${count} shots.`,`Overall premise: ${idea||'Use the individual frame descriptions below.'}`,cinema?`Shared camera / lens: ${cinema}`:'',cont?`Visual continuity: ${cont}`:'',`Aspect ratio: ${aspect}.`,''];shots.forEach((d,i)=>lines.push(`Shot ${i+1}: ${shotPhrase(d)}`));lines.push('',`Keep character identity, wardrobe, geography, lighting and art direction coherent across all ${count} frames.`);
+  }
+  $('storyOutput').value=lines.filter((x,i)=>x!==''||i===lines.length-1||lines[i-1]!=='').join('\n');updateCounters();
+}
+function compileAll(){if(mode==='image')compileImage();if(mode==='video')compileVideo();if(mode==='storyboard')compileStory()}
+function fmt(n){return Number.isInteger(n)?String(n):n.toFixed(1)}
+function currentOutput(){return mode==='image'?$('imageOutput'):mode==='video'?$('videoOutput'):$('storyOutput')}
+function addElement(){let name=$('elementName').value.trim().replace(/^@/,'').replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_-]/g,'');if(!name)return;let token='@'+$('elementType').value+'_'+name,arr=safeArray('lumacrom_elements_v2');if(!arr.includes(token))arr.push(token);storeSet('lumacrom_elements_v2',JSON.stringify(arr));$('elementName').value='';renderElements()}
+function renderElements(){let defaults=['@ch_character','@loc_location','@prop_item','@style_reference'],saved=safeArray('lumacrom_elements_v2'),arr=[...new Set([...defaults,...saved])];$('elementTokens').innerHTML='';arr.forEach(t=>{let d=document.createElement('div');d.className='token';let b=document.createElement('button');b.textContent=t;b.addEventListener('click',()=>insertText(t));d.appendChild(b);if(saved.includes(t)){let x=document.createElement('button');x.className='x';x.textContent='×';x.addEventListener('click',()=>{storeSet('lumacrom_elements_v2',JSON.stringify(saved.filter(v=>v!==t)));renderElements()});d.appendChild(x)}$('elementTokens').appendChild(d)})}
+function savePreset(){let out=currentOutput().value.trim();if(!out)return toast('Nothing to save');let name=prompt('Preset name:');if(!name)return;let arr=safeArray('lumacrom_presets_v2');arr.unshift({name,mode,model:$('modelSelect').value,output:out,date:Date.now()});storeSet('lumacrom_presets_v2',JSON.stringify(arr.slice(0,20)));renderSaved();toast('Preset saved')}
+function renderSaved(){let arr=safeArray('lumacrom_presets_v2');$('savedList').innerHTML='';if(!arr.length){$('savedList').innerHTML='<div class="modelHint">No saved presets yet.</div>';return}arr.forEach((p,i)=>{let r=document.createElement('div');r.className='savedRow';let b=document.createElement('button');b.className='btn small';b.textContent=p.name;b.addEventListener('click',()=>{setMode(p.mode);if(profiles().some(x=>x.id===p.model)){selectedModelId=p.model;$('modelSelect').value=p.model;updateManual()}currentOutput().value=p.output;updateCounters();toast('Preset loaded')});let x=document.createElement('button');x.className='btn small danger';x.textContent='×';x.addEventListener('click',()=>{arr.splice(i,1);storeSet('lumacrom_presets_v2',JSON.stringify(arr));renderSaved()});r.append(b,x);$('savedList').appendChild(r)})}
+function clearCurrent(){if(mode==='image'){['imageIdea','imageNegative','imageExtra'].forEach(id=>$(id).value='');compileImage()}else if(mode==='video'){['videoIdea','videoContinuity','videoAudio'].forEach(id=>$(id).value='');$('videoShots').querySelectorAll('textarea').forEach(t=>t.value='');compileVideo()}else{['storyIdea','storyContinuity'].forEach(id=>$(id).value='');$('storyShots').querySelectorAll('textarea').forEach(t=>t.value='');compileStory()}}
+async function copyText(txt){if(!txt)return toast('Nothing to copy');try{await navigator.clipboard.writeText(txt)}catch(e){let t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}toast('Copied to clipboard')}
+function updateCounters(){$('imageCounter').textContent=$('imageOutput').value.length+' characters';$('videoCounter').textContent=$('videoOutput').value.length+' characters';$('storyCounter').textContent=$('storyOutput').value.length+' characters'}
+function toast(s){$('toast').textContent=s;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1500)}
+init();
+</script>
 
 <script>
-(function(){
-  const safeStorage = {
-    get(key, fallback){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; } },
-    set(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
-  };
-  const $ = id => document.getElementById(id);
-  let activeField = null;
-  const CAMERA_OPTIONS = [
-    'Panavision DXL2','Panavision Panaflex 35mm','ARRI Alexa 35','ARRI Alexa Mini LF','ARRI Alexa 65','ARRICAM LT 35mm','ARRIFLEX 435','ARRIFLEX 416',
-    'RED V-Raptor','RED Komodo-X','Sony Venice 2','Canon C500 Mark II','Bolex 16mm','Aaton XTR 16mm','Super 8 film camera','IMAX 65mm camera'
-  ];
-  const LENS_OPTIONS = [
-    'Panavision C-Series anamorphic','Panavision G-Series anamorphic','Panavision Primo 70','Cooke S4/i','Cooke Speed Panchro','ARRI Signature Prime','Zeiss Supreme Prime','Zeiss Super Speed',
-    'Leica Summilux-C','Canon K35','Hawk anamorphic','24mm wide lens','35mm lens','50mm standard lens','85mm portrait lens','135mm telephoto'
-  ];
-  const MODELS = {
-    image:[
-      {id:'nanobanana-pro',name:'Nano Banana Pro', hint:'Best with explicit instruction blocks, clear layout descriptions, and direct reference fidelity language.', tag:'Instruction-rich reference prompts'},
-      {id:'openai-image',name:'OpenAI Image', hint:'Responds well to clear descriptive briefs with concise constraints and layout instructions.', tag:'Descriptive prompt style'},
-      {id:'midjourney',name:'Midjourney', hint:'Works best with concise visual phrases, weighted descriptors, and short constraints. Use --ar style endings.', tag:'Compact visual syntax'},
-      {id:'flux',name:'FLUX', hint:'Use straightforward descriptive prompts with clear subject, environment, and style.', tag:'Natural language prompt'},
-      {id:'sdxl',name:'SDXL', hint:'Often benefits from a positive prompt plus a separate negative prompt.', tag:'Positive / negative prompt'},
-      {id:'ideogram',name:'Ideogram', hint:'Good for layout clarity and text handling. Keep structure explicit.', tag:'Layout-aware prompting'}
-    ],
-    video:[
-      {id:'kling',name:'Kling', hint:'Use action-first and camera-first motion descriptions with per-shot timing.', tag:'Dynamic motion prompt'},
-      {id:'veo',name:'Veo', hint:'Use scene subject + action + cinematography + environment + style.', tag:'Cinematography-first video'},
-      {id:'runway',name:'Runway', hint:'Use direct visible motion language and clear scene transitions.', tag:'Direct motion prompting'},
-      {id:'sora',name:'Sora', hint:'Use physically coherent scene descriptions with temporal clarity.', tag:'Physical scene continuity'},
-      {id:'seedance',name:'Seedance', hint:'Use compact sequence prompts with specific shot movement and subject behavior.', tag:'Shot-sequence prompts'},
-      {id:'luma',name:'Luma', hint:'Use visual result language and camera movement with a strong overall style line.', tag:'Visual result language'}
-    ],
-    storyboard:[
-      {id:'nanobanana-pro',name:'Nano Banana Pro', hint:'Best for detailed storyboard blocks with clearly separated shots.', tag:'Separated shot blocks'},
-      {id:'openai-image',name:'OpenAI Image', hint:'Use a concise storyboard header followed by exact shot entries.', tag:'Structured storyboard text'},
-      {id:'midjourney',name:'Midjourney', hint:'Keep each shot compact and visual. Avoid excess prose.', tag:'Compact shot descriptors'},
-      {id:'flux',name:'FLUX', hint:'Works well with shot-by-shot descriptive language.', tag:'Shot descriptive prompt'}
-    ],
-    sheet:[
-      {id:'nanobanana-pro',name:'Nano Banana Pro', hint:'Best choice for reference sheets. Use exact layout and consistency instructions.', tag:'Reference-sheet specialist'},
-      {id:'openai-image',name:'OpenAI Image', hint:'Use structured sheet descriptions and explicit panel layout text.', tag:'Structured sheet prompt'},
-      {id:'flux',name:'FLUX', hint:'Use a direct description of layout, subject, and constraints.', tag:'Layout + subject prompt'},
-      {id:'midjourney',name:'Midjourney', hint:'Can work for sheet-like layouts but keep the request concise and visual.', tag:'Concise sheet syntax'}
-    ]
-  };
-  const GROUPS = [
-    ['Camera Bodies', CAMERA_OPTIONS],
-    ['Lenses', LENS_OPTIONS],
-    ['Shot Sizes', ['extreme wide shot','wide shot','medium wide shot','medium shot','medium close-up','close-up','extreme close-up','full body shot','cowboy shot']],
-    ['Camera Angles', ['eye level','low angle','high angle','top-down orthographic','45-degree left angle','45-degree right angle','overhead','worm’s-eye view','dutch angle']],
-    ['Camera Movement', ['static camera','slow push-in','dolly in','dolly out','pan left','pan right','tilt up','tilt down','handheld motion','tracking shot','crane up','orbit camera']],
-    ['Lighting', ['soft studio lighting','hard rim light','golden hour lighting','overcast daylight','moody practical lighting','neon backlight','high contrast lighting','flat product lighting','torch-lit interior']],
-    ['Styles', ['photorealistic cinematic','ultra-realistic 4K photography','epic dark fantasy retro film','low poly PS1','low poly N64','PS2 cinematic','anime','2D animation','fashion editorial','dark sci-fi','gothic horror','Y2K sleek tech']],
-    ['Materials / Look', ['natural skin textures with pores','pixelart textures without anti-aliasing','real metal reflections','fabric wrinkles','subtle imperfections','high-end studio shoot','realistic studio set','professional DSLR photo quality']],
-    ['Composition / Layout', ['clean grid on white background','clean grid on black background','2x4 grid','5x4 grid of 20 poses','top row turnaround views','middle row close-ups','bottom row detail studies','clean panel labels']],
-    ['Negative / Constraints', ['no cartoon style','no anime style','no CG or 3D render','do not invent new objects','keep exact proportions','no people','no extra text','no low quality','no rearranging props']],
-    ['Prompt Tokens', ['@ch_hero','@loc_shrine','@prop_jitte','@style_ps1_cinematic','@ref_front_view']]
-  ];
-  const SHEET_TYPES = {
-    'character-sheet': {
-      label:'Character Sheet', bg:'white', layout:'clean grid on white background',
-      realistic:`Create a professional photorealistic character reference sheet from the uploaded reference image. Ultra-realistic 4K photography style, like a high-end studio shoot. Natural human being.
-
-Layout as a clean grid on white background:
-- Top row: Full body front view, side view (profile), back view, three-quarter view (all standing neutral pose)
-- Middle row: Close-up face front, smiling expression, serious expression, surprised expression
-- Bottom row: Additional details like hand close-ups, clothing textures, and any accessories
-
-Key instructions:
-- Photorealistic human photography, natural skin textures with pores and subtle imperfections, realistic lighting and shadows, no cartoon or anime style or CG or 3D render
-- Exact same facial features, body proportions, hair, skin tone, and clothing as reference
-- High resolution 4K, sharp focus, professional DSLR photo quality, natural colors
-- Consistent real-world physics: fabric wrinkles, hair strands, eye reflections`,
-      anime:`Create a professional character design sheet from the uploaded reference image in the chosen animation or anime style. Keep the exact same identity, face design, hairstyle, body proportions, costume logic, and color palette.
-
-Layout as a clean grid on a neutral or white background:
-- Top row: full body front, side, back, and three-quarter turnaround
-- Middle row: face front and three expressions
-- Bottom row: hands, costume details, props, accessories
-
-Key instructions:
-- Keep the same character in every panel
-- Clean linework and readable silhouette
-- Consistent shading and color language
-- No random redesigns or extra accessories`,
-      lowpoly:`Create a low poly character reference sheet from the uploaded reference image. End-of-90s game CGI style with low poly geometry and pixelart textures without anti-aliasing.
-
-Layout as a clean grid on black background:
-- Top row: full body front, side, back, three-quarter turnaround
-- Middle row: face / head close-ups and key costume details
-- Bottom row: hands, accessories, texture close-ups
-
-Key instructions:
-- Exact same features, proportions, and textures as the reference
-- Visible low poly construction
-- Crisp pixel textures, no anti-aliasing
-- Consistent retro game lighting and shadows`
-    },
-    'character-poses': {
-      label:'Character Poses Grid', bg:'white', layout:'5x4 grid',
-      realistic:`Generate a 5x4 grid of 20 different poses of the exact same character from the reference image. Keep identical face, hair, body type, and clothing. Vary poses dynamically: standing, sitting, jumping, fighting stances, walking, turning, crouching, leaning, gesturing, and action poses. Keep lighting, lens logic, and style consistent across the whole grid.`,
-      anime:`Generate a 5x4 grid of 20 different poses of the exact same character in the chosen anime or animation style. Keep the same face, hair shape, costume, colors, and body proportions. Use expressive and dynamic silhouette variety while preserving character consistency.`,
-      lowpoly:`Generate a 5x4 grid of 20 different poses of the exact same low poly character from the reference image. Preserve model proportions, textures, and retro game look. Keep the whole grid consistent like a clean pose sheet.`
-    },
-    'asset-sheet': {
-      label:'Asset Sheet', bg:'white', layout:'clean grid',
-      realistic:`Create a professional photorealistic asset reference sheet from the uploaded reference image. Ultra-realistic 4K photography style, like a high-end studio shoot. Natural realistic asset.
-
-Layout as a clean grid on white background:
-- Top row: Full asset front view, side view (profile), back view, three-quarter view
-- Middle row: Close-up front
-- Bottom row: Additional details like close-ups and textures
-
-Key instructions:
-- Photorealistic photography, natural textures with subtle imperfections, realistic lighting and shadows, no cartoon or anime style or CG or 3D render
-- Exact same features, proportions and tone as reference
-- High resolution 4K, sharp focus, professional DSLR photo quality, natural colors
-- Consistent real-world physics: reflections`,
-      anime:`Create a clean asset design sheet in the selected animation or anime style. Show the same asset consistently in multiple views and detail close-ups. Keep the exact shape language, proportions, and motif from the reference.`,
-      lowpoly:`Create a low poly asset reference sheet from the uploaded reference image. End-of-90s gaming studio CGI with low poly geometry and pixelart textures without anti-aliasing.
-
-Layout as a clean grid on black background:
-- Top row: Full asset front, side, back, three-quarter
-- Middle row: Close-up front details
-- Bottom row: Additional close-ups and textures
-
-Key instructions:
-- Exact same features, proportions and textures as reference
-- Retro console lighting and shadows
-- High-resolution output but visibly low poly`
-    },
-    'item-sheet': {
-      label:'Item / Prop Sheet', bg:'white', layout:'clean grid',
-      realistic:`Create a professional photorealistic prop or gadget reference sheet from the uploaded reference image. Ultra-realistic 4K photography style, like a high-end studio shoot. Realistic prop.
-
-Layout as a clean grid on white background:
-- Top row: Full size front view, side view (profile), back view, three-quarter view
-- Middle row: Close-up details front and key functional parts
-- Bottom row: Additional details like textures, materials, and accessories
-
-Key instructions:
-- Photorealistic prop photography with realistic lighting and shadows
-- Exact same features, size proportions, and tone
-- High resolution 4K, sharp focus, professional DSLR photo quality
-- Consistent real-world physics: metal details, plastic details, reflections`,
-      anime:`Create a clean item design sheet in the chosen animation style. Show turnaround views plus close-up detail panels, keeping the exact shape and color identity of the reference.`,
-      lowpoly:`Create a low poly prop reference sheet from the uploaded reference image. Retro PS1 / N64 game CGI style with pixelart textures and no anti-aliasing. Show front, side, back, three-quarter, plus material and detail close-ups.`
-    },
-    'weapon-sheet': {
-      label:'Weapon Sheet', bg:'white', layout:'clean grid',
-      realistic:`Create a professional photorealistic weapon reference sheet from the uploaded reference image. Ultra-realistic 4K photography style, like a high-end studio shoot. Natural live-action prop. Include bullets or ammunition if relevant.
-
-Layout as a clean grid on white background:
-- Top row: Full size front view, side view (profile), back view, three-quarter view
-- Middle row: Close-up details front, top part, and base part
-- Bottom row: Additional details like close-ups, textures, and ammunition
-
-Key instructions:
-- Photorealistic prop photography, realistic lighting and shadows, no cartoon or anime style or CG or 3D render
-- Exact same features, proportions, materials, and wear as reference
-- High resolution 4K, sharp focus, professional DSLR photo quality
-- Consistent real-world physics: metal details, reflections, material response`,
-      anime:`Create a clean weapon design sheet in the chosen anime or animation style. Preserve the exact shape identity, blade or gun silhouette, materials, and detailing. Include ammunition or bullets if relevant.`,
-      lowpoly:`Create a retro low poly weapon sheet from the uploaded reference image. PS1 / N64 style, pixelart textures without anti-aliasing, front / side / back / three-quarter plus close-ups and ammo details.`
-    },
-    'vehicle-sheet': {
-      label:'Vehicle Sheet', bg:'white', layout:'clean grid',
-      realistic:`Create a professional photorealistic vehicle reference sheet from the uploaded reference image. Ultra-realistic 4K photography style, like a high-end studio shoot. Realistic vehicle. If multiple uploaded references are provided, use them for front, top, side, and back consistency.
-
-Layout as a clean grid on white background:
-- Top row: front view, side view (profile), back view, three-quarter view
-- Middle row: additional angle close-up, cockpit / cabin / wheel details
-- Bottom row: extra material details and accessories
-
-Key instructions:
-- Photorealistic vehicle photography, realistic lighting and shadows, no cartoon or anime style or CG or 3D render
-- Exact same features, size proportions, wheel count, and tone as reference
-- High resolution 4K, sharp focus, professional DSLR photo quality, natural colors
-- Consistent real-world physics: metal, glass, rubber, reflections`,
-      anime:`Create a clean vehicle design sheet in the chosen animation style. Preserve the exact silhouette, proportions, wheel placement, and design language across all views.`,
-      lowpoly:`Create a low poly vehicle reference sheet from the uploaded reference image. PS1 or N64 style with pixelart textures and no anti-aliasing. Show turnaround views, close-up front details, and key texture callouts.`
-    },
-    'location-sheet': {
-      label:'Location / Scene Sheet', bg:'white', layout:'2x4 grid (eight panels)',
-      realistic:`Photorealistic SCENE SHEET of the exact same location shown in the reference images.
-Goal: maximum environment consistency and identical architecture, identical prop placement, identical wall dressing across all views.
-
-Layout: 2x4 grid (eight panels).
-
-Panel A: Wide establishing shot, eye-level, 24–28mm
-Panel B: Reverse wide from the opposite direction, eye-level, 24–28mm
-Panel C: 45° left angle, 35mm
-Panel D: 45° right angle, 35mm
-Panel E: High angle near ceiling, 24mm (shows layout clearly)
-Panel F: Low angle near floor, 35mm (shows depth)
-Panel G (TOP-DOWN): Flat aerial orthographic view — camera perfectly 90° above the floor, no perspective, no tilt, like an architectural floor plan photo. Show the entire floor layout and exact prop positions.
-Panel H: Straight-on elevation view of the main wall (front view), 50mm, minimal distortion.
-
-Add clean labels in each panel corner: A / B / C / D / E / F / G / H.
-
-Create a professional photorealistic scene sheet from the uploaded reference image. Ultra-realistic 4K photography style, like a high-end scenography shoot. Realistic studio set.
-
-Key instructions:
-- Keep floor pattern, wall textures, ceiling height, door/window positions, and all props exactly the same
-- Keep the same color grading and same lighting direction/intensity across all panels
-- Do not invent new objects, doors, windows, or signs
-- Do not rearrange anything visible in the references
-- No people. No characters.`,
-      anime:`Create a location turnaround and layout sheet in the chosen animation style. Use a 2x4 grid with wide, reverse, angled, high, low, top-down, and elevation views while keeping the set perfectly consistent. No people.`,
-      lowpoly:`Create a low poly environment sheet of the same location. Use a 2x4 grid with wide, reverse, angled, high, low, top-down, and elevation views. Keep the exact same architecture, prop placement, and retro game lighting.`
-    }
-  };
-  const STYLE_FAMILIES = [
-    {id:'realistic',name:'Realistic / Photoreal'},
-    {id:'lowpoly',name:'Low Poly / Retro Game'},
-    {id:'anime',name:'Animation / Anime / Cartoon'},
-    {id:'fantasy-film',name:'Epic Dark Fantasy Retro Film'}
-  ];
-
-  const DEFAULT_TOKENS = safeStorage.get('lumacromTokens', [
-    '@ch_hero','@loc_shrine','@prop_jitte','@style_ps1_cinematic','@ref_front_view'
-  ]);
-  let tokens = Array.isArray(DEFAULT_TOKENS) ? DEFAULT_TOKENS : [];
-  const state = { mode:'image' };
-
-  function profile(){ const list = MODELS[state.mode] || []; return list.find(x=>x.id === $('globalModel').value) || list[0]; }
-  function clean(s){ return String(s||'').replace(/\s+/g,' ').trim(); }
-  function sentence(s){ s = clean(s); if(!s) return ''; return /[.!?]$/.test(s) ? s : s + '.'; }
-  function setActive(el){ if(el && 'value' in el) activeField = el; }
-  function bindFocusable(root=document){ root.querySelectorAll('textarea,input[type="text"],input[type="number"]').forEach(el=>{
-    el.addEventListener('focus',()=>setActive(el)); el.addEventListener('click',()=>setActive(el));
-  }); }
-  function insertText(txt){ if(!activeField) return; const el = activeField; const start = el.selectionStart ?? el.value.length; const end = el.selectionEnd ?? el.value.length; const before = el.value.slice(0,start); const after = el.value.slice(end); const spacerBefore = before && !/\s$/.test(before) ? ' ' : ''; const spacerAfter = after && !/^\s/.test(after) ? ' ' : ''; el.value = before + spacerBefore + txt + spacerAfter + after; const pos = (before + spacerBefore + txt).length; try{ el.focus(); el.setSelectionRange(pos,pos); }catch(e){} triggerAll(); }
-  function fillSelect(id, items, placeholder=''){ const sel = $(id); sel.innerHTML=''; items.forEach((x,i)=>{ const o=document.createElement('option'); o.value=x; o.textContent=x; if(i===0 && placeholder) o.textContent = x; sel.appendChild(o); }); }
-  function fillModelSelect(){ const list = MODELS[state.mode]; const sel = $('globalModel'); const prev = sel.value; sel.innerHTML=''; list.forEach((m,i)=>{ const o=document.createElement('option'); o.value=m.id; o.textContent=m.name; sel.appendChild(o); }); const wanted = list.some(x=>x.id===prev) ? prev : list[0].id; sel.value = wanted; updateManual(); }
-  function updateManual(){ const p = profile(); $('manualModeLabel').textContent = state.mode.charAt(0).toUpperCase()+state.mode.slice(1); $('manualHint').textContent = p ? p.hint : ''; $('manualTag').textContent = p ? p.tag : ''; }
-  function renderTokens(){ $('tokenList').innerHTML=''; tokens.forEach(tok=>{ const wrap=document.createElement('div'); wrap.className='token'; const b=document.createElement('button'); b.className='tokenBtn'; b.textContent=tok; b.addEventListener('click',()=>insertText(tok)); const x=document.createElement('button'); x.className='tokenBtn del'; x.textContent='×'; x.addEventListener('click',()=>{ tokens=tokens.filter(t=>t!==tok); safeStorage.set('lumacromTokens', tokens); renderTokens(); }); wrap.appendChild(b); wrap.appendChild(x); $('tokenList').appendChild(wrap); }); }
-  function renderGroups(){ const q = $('controlSearch').value.trim().toLowerCase(); $('paramWrap').innerHTML=''; GROUPS.forEach(([title,items])=>{ const filtered = items.filter(x=>!q || title.toLowerCase().includes(q) || x.toLowerCase().includes(q)); if(!filtered.length) return; const d=document.createElement('div'); d.className='param'; d.innerHTML=`<div class="paramTitle"><b>${title}</b><span>click to insert</span></div><div class="chips"></div>`; const c=d.querySelector('.chips'); filtered.forEach(item=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=item; b.addEventListener('click',()=>insertText(item)); c.appendChild(b); }); $('paramWrap').appendChild(d); }); }
-  function setMode(mode){ state.mode = mode; $('modeSelect').value = mode; document.querySelectorAll('.modeBtn').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode)); document.querySelectorAll('.modePanel').forEach(p=>p.classList.add('hidden')); $('panel-'+mode).classList.remove('hidden'); fillModelSelect(); }
-  function ensureNumber(v, fallback){ const n = parseInt(v,10); return Number.isFinite(n) ? n : fallback; }
-
-  function compileByModel(base, neg=''){ const p = profile(); if(!p) return base;
-    if(p.id==='midjourney'){
-      let compact = base.replace(/
-+/g, ', ').replace(/\s+/g,' ').trim(); compact = compact.replace(/^(Create|Generate)\s+/i,'');
-      if(state.mode==='image' || state.mode==='storyboard' || state.mode==='sheet'){
-        const aspect = state.mode==='image' ? $('imageAspect').value : state.mode==='storyboard' ? $('boardAspect').value : $('sheetAspect').value;
-        compact += aspect ? ` --ar ${aspect}` : '';
-      }
-      if(neg) compact += ` --no ${neg.replace(/[;]+/g,' ').replace(/,/g,' ')}`;
-      return compact;
-    }
-    if(p.id==='sdxl') return neg ? `Positive prompt:
-${base}
-
-Negative prompt:
-${neg}` : `Positive prompt:
-${base}`;
-    if(p.id==='openai-image' || p.id==='flux' || p.id==='ideogram' || p.id==='nanobanana-pro' || p.id==='sora' || p.id==='kling' || p.id==='veo' || p.id==='runway' || p.id==='seedance' || p.id==='luma') return base + (neg ? `
-
-Constraints:
-${neg}` : '');
-    return base;
-  }
-
-  function compileImage(){
-    const idea = clean($('imageIdea').value), extra = clean($('imageExtra').value), neg = clean($('imageNegative').value), purpose=$('imagePurpose').value, aspect=$('imageAspect').value, camera=$('imageCamera').value, lens=$('imageLens').value;
-    if(!idea && !extra){ $('imageOutput').value=''; return; }
-    const base = [
-      `Create a ${purpose} image.`,
-      sentence(idea),
-      `Aspect ratio: ${aspect}.`,
-      camera ? `Camera: ${camera}.` : '',
-      lens ? `Lens: ${lens}.` : '',
-      extra ? `Additional direction: ${sentence(extra)}` : ''
-    ].filter(Boolean).join(' ');
-    $('imageOutput').value = compileByModel(base, neg);
-  }
-
-  function buildVideoShots(){
-    const wrap = $('videoShotsWrap'); const n = Math.max(1, Math.min(12, ensureNumber($('videoShots').value,4))); wrap.innerHTML='';
-    const total = Math.max(1, ensureNumber($('videoDuration').value,10));
-    for(let i=0;i<n;i++){
-      const start = ((total / n) * i).toFixed(1).replace(/\.0$/,'');
-      const end = ((total / n) * (i+1)).toFixed(1).replace(/\.0$/,'');
-      const card=document.createElement('div'); card.className='shotCard';
-      card.innerHTML = `
-        <div class="shotHead"><b>Shot ${i+1}</b><span class="timeTag">${start}s–${end}s</span></div>
-        <div class="grid2">
-          <div class="field"><label>Shot Description</label><textarea class="video-desc smallArea" data-idx="${i}" placeholder="Describe action and visual content."></textarea></div>
-          <div class="field"><label>Additional Notes</label><textarea class="video-note smallArea" data-idx="${i}" placeholder="Performance, transitions, continuity, detail."></textarea></div>
-        </div>
-        <div class="grid4" style="margin-top:10px">
-          <div class="field"><label>Framing</label><select class="video-framing"><option>wide shot</option><option>medium shot</option><option>close-up</option><option>full body shot</option><option>extreme close-up</option></select></div>
-          <div class="field"><label>Angle</label><select class="video-angle"><option>eye level</option><option>low angle</option><option>high angle</option><option>45-degree left angle</option><option>45-degree right angle</option></select></div>
-          <div class="field"><label>Movement</label><select class="video-move"><option>static camera</option><option>slow push-in</option><option>dolly in</option><option>pan left</option><option>pan right</option><option>tracking shot</option></select></div>
-          <div class="field"><label>Lens</label><select class="video-lens"></select></div>
-        </div>`;
-      wrap.appendChild(card);
-      const lensSel = card.querySelector('.video-lens'); LENS_OPTIONS.forEach(x=>{ const o=document.createElement('option'); o.value=x; o.textContent=x; lensSel.appendChild(o); });
-    }
-    bindFocusable(wrap);
-    wrap.querySelectorAll('textarea,select,input').forEach(el=>el.addEventListener('input',compileVideo));
-  }
-  function compileVideo(){
-    const premise = clean($('videoPremise').value), workflow=$('videoWorkflow').value, total=$('videoDuration').value, style=$('videoStyle').value, shots=[...$('videoShotsWrap').querySelectorAll('.shotCard')];
-    const globalCam = $('imageCamera').value, globalLens = $('imageLens').value;
-    let lines = [];
-    lines.push(`Create a ${workflow} prompt.`);
-    if(premise) lines.push(sentence(premise));
-    lines.push(`Total duration: ${total} seconds.`);
-    lines.push(`Overall style: ${style}.`);
-    if(globalCam) lines.push(`Global camera package: ${globalCam}.`);
-    if(globalLens) lines.push(`Global lens family: ${globalLens}.`);
-    lines.push(`Use ${shots.length} clearly separated shots.`);
-    shots.forEach((card,i)=>{
-      const time = card.querySelector('.timeTag').textContent;
-      const desc = clean(card.querySelector('.video-desc').value);
-      const note = clean(card.querySelector('.video-note').value);
-      const framing = card.querySelector('.video-framing').value;
-      const angle = card.querySelector('.video-angle').value;
-      const move = card.querySelector('.video-move').value;
-      const lens = card.querySelector('.video-lens').value;
-      lines.push(`Shot ${i+1} (${time}): ${[desc, `Framing: ${framing}`, `Angle: ${angle}`, `Movement: ${move}`, `Lens: ${lens}`, note ? `Notes: ${note}` : ''].filter(Boolean).join('. ')}.`);
-    });
-    $('videoOutput').value = compileByModel(lines.join('
-'), 'avoid flicker, avoid inconsistency');
-  }
-
-  function buildBoardShots(){
-    const wrap = $('boardShotsWrap'); const n = Math.max(2, Math.min(16, ensureNumber($('boardShots').value,6))); wrap.innerHTML='';
-    for(let i=0;i<n;i++){
-      const card=document.createElement('div'); card.className='shotCard';
-      card.innerHTML = `
-      <div class="shotHead"><b>Shot ${i+1}</b><span class="timeTag">board frame</span></div>
-      <div class="grid2">
-        <div class="field"><label>Shot Description</label><textarea class="board-desc smallArea" placeholder="What happens in this shot?"></textarea></div>
-        <div class="field"><label>Extra Notes</label><textarea class="board-note smallArea" placeholder="Emotion, staging, lighting, subject focus."></textarea></div>
-      </div>
-      <div class="grid4" style="margin-top:10px">
-        <div class="field"><label>Framing</label><select class="board-frame"><option>wide shot</option><option>medium shot</option><option>close-up</option><option>full body shot</option><option>extreme close-up</option></select></div>
-        <div class="field"><label>Angle</label><select class="board-angle"><option>eye level</option><option>low angle</option><option>high angle</option><option>45-degree left angle</option><option>45-degree right angle</option></select></div>
-        <div class="field"><label>Movement Feel</label><select class="board-move"><option>static frame</option><option>push-in feel</option><option>tracking feel</option><option>pan feel</option><option>handheld feel</option></select></div>
-        <div class="field"><label>Lens</label><select class="board-lens"></select></div>
-      </div>`;
-      wrap.appendChild(card);
-      const lensSel = card.querySelector('.board-lens'); LENS_OPTIONS.forEach(x=>{ const o=document.createElement('option'); o.value=x; o.textContent=x; lensSel.appendChild(o); });
-    }
-    bindFocusable(wrap);
-    wrap.querySelectorAll('textarea,select,input').forEach(el=>el.addEventListener('input',compileBoard));
-  }
-  function compileBoard(){
-    const premise = clean($('boardPremise').value), aspect = $('boardAspect').value, style = $('boardStyle').value, cam = $('boardCamera').value, shots = [...$('boardShotsWrap').querySelectorAll('.shotCard')];
-    let lines = [];
-    lines.push(`Storyboard of exactly ${shots.length} shots.`);
-    if(premise) lines.push(sentence(premise));
-    lines.push(`Render as ${style}. Aspect ratio ${aspect}. Camera package ${cam}.`);
-    shots.forEach((card,i)=>{
-      const desc = clean(card.querySelector('.board-desc').value);
-      const note = clean(card.querySelector('.board-note').value);
-      const frame = card.querySelector('.board-frame').value;
-      const angle = card.querySelector('.board-angle').value;
-      const move = card.querySelector('.board-move').value;
-      const lens = card.querySelector('.board-lens').value;
-      lines.push(`Shot ${i+1}: ${[desc, `Framing: ${frame}`, `Angle: ${angle}`, `Movement feel: ${move}`, `Lens: ${lens}`, note ? `Notes: ${note}` : ''].filter(Boolean).join('. ')}.`);
-    });
-    $('boardOutput').value = compileByModel(lines.join('
-'), 'do not merge shots, keep shots separate');
-  }
-
-  function resolveSheetTemplate(typeId, styleId){
-    const t = SHEET_TYPES[typeId];
-    if(!t) return '';
-    if(styleId==='realistic') return t.realistic;
-    if(styleId==='lowpoly') return t.lowpoly || t.realistic;
-    if(styleId==='anime') return t.anime || t.realistic;
-    if(styleId==='fantasy-film') return (t.realistic + `
-
-Additional style direction:
-- Visual tone: epic dark fantasy retro film
-- Keep the sheet format clean and readable while using moody retro-film realism.`);
-    return t.realistic;
-  }
-  function applySheetStyleDefaults(){
-    const t = SHEET_TYPES[$('sheetType').value];
-    const style = $('sheetStyle').value;
-    if(!t) return;
-    if($('sheetBg').value==='auto'){
-      $('sheetBg').dataset.auto = '1';
-    }
-    if(style==='lowpoly') $('sheetBg').value='black';
-    else if(style==='realistic' || style==='anime' || style==='fantasy-film') $('sheetBg').value='white';
-  }
-  function compileSheet(){
-    const typeId = $('sheetType').value, styleId = $('sheetStyle').value, bg = $('sheetBg').value, subject = clean($('sheetSubject').value), refs = clean($('sheetRefs').value), desc = clean($('sheetDescription').value), extra = clean($('sheetExtra').value), detail = $('sheetDetail').value, labels = $('sheetLabels').value, focus = $('sheetFocus').value, aspect=$('sheetAspect').value;
-    const t = SHEET_TYPES[typeId];
-    if(!t){ $('sheetOutput').value=''; return; }
-    let base = resolveSheetTemplate(typeId, styleId);
-    let additions = [];
-    if(subject) additions.push(`Primary subject: ${subject}.`);
-    if(desc) additions.push(`Subject description: ${sentence(desc)}`);
-    if(refs) additions.push(`Reference handling: ${sentence(refs)}`);
-    additions.push(`Preferred background: ${bg}.`);
-    additions.push(`Aspect ratio: ${aspect}.`);
-    additions.push(`Coverage emphasis: ${focus}.`);
-    additions.push(`Layout emphasis: ${detail}.`);
-    additions.push(labels==='yes' ? 'Add clean panel labels where helpful.' : 'Do not add labels or panel text unless necessary.');
-    if(extra) additions.push(`Additional constraints: ${sentence(extra)}`);
-    const neg = styleId==='lowpoly' ? 'no anti-aliasing smoothing, no modern PBR polish unless asked' : 'no random redesigns, no invented details';
-    $('sheetOutput').value = compileByModel(base + '
-
-Additional instructions:
-- ' + additions.join('
-- '), neg);
-  }
-
-  function triggerAll(){ compileImage(); compileVideo(); compileBoard(); compileSheet(); }
-  function clearCurrent(){ document.querySelectorAll('textarea:not([readonly]), input[type="text"], input[type="number"]').forEach(el=>{ if(el.id==='videoDuration') el.value=10; else if(el.id==='videoShots') el.value=4; else if(el.id==='boardShots') el.value=6; else el.value=''; }); $('imagePurpose').selectedIndex=0; $('imageAspect').selectedIndex=0; $('videoWorkflow').selectedIndex=0; $('videoStyle').selectedIndex=0; $('boardAspect').selectedIndex=0; $('boardStyle').selectedIndex=0; $('sheetDetail').selectedIndex=0; $('sheetLabels').selectedIndex=0; $('sheetFocus').selectedIndex=0; $('sheetStyle').selectedIndex=0; $('sheetBg').value='auto'; $('sheetAspect').selectedIndex=0; buildVideoShots(); buildBoardShots(); applySheetStyleDefaults(); triggerAll(); }
-  function copyText(val){ if(!val) return; navigator.clipboard?.writeText(val).catch(()=>{ const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }); }
-  function activeOutputId(){ return state.mode==='image' ? 'imageOutput' : state.mode==='video' ? 'videoOutput' : state.mode==='storyboard' ? 'boardOutput' : 'sheetOutput'; }
-  function savePreset(){ const payload = {}; document.querySelectorAll('input,textarea,select').forEach(el=>{ if(!el.id) return; payload[el.id] = el.value; }); payload.mode = state.mode; safeStorage.set('lumacromPreset', payload); alert('Preset saved locally.'); }
-  function loadPreset(){ const payload = safeStorage.get('lumacromPreset', null); if(!payload){ alert('No saved preset found.'); return; } if(payload.mode) setMode(payload.mode); Object.entries(payload).forEach(([id,val])=>{ const el=$(id); if(el) el.value = val; }); buildVideoShots(); buildBoardShots(); // rebuild then set child values best effort omitted for simplicity
-    // second pass for dynamic textareas and selects based on index order is skipped; user can re-save later.
-    applySheetStyleDefaults(); triggerAll(); alert('Preset loaded. Dynamic shot blocks were rebuilt; if needed, fine-tune shot fields again.'); }
-
-  function initSheetSelectors(){
-    const typeSel=$('sheetType'); typeSel.innerHTML=''; Object.entries(SHEET_TYPES).forEach(([id,obj])=>{ const o=document.createElement('option'); o.value=id; o.textContent=obj.label; typeSel.appendChild(o); });
-    const styleSel=$('sheetStyle'); styleSel.innerHTML=''; STYLE_FAMILIES.forEach(x=>{ const o=document.createElement('option'); o.value=x.id; o.textContent=x.name; styleSel.appendChild(o); });
-  }
-
-  // init
-  fillSelect('imageCamera', CAMERA_OPTIONS); fillSelect('imageLens', LENS_OPTIONS); fillSelect('boardCamera', CAMERA_OPTIONS);
-  initSheetSelectors(); renderTokens(); renderGroups(); setMode('image'); buildVideoShots(); buildBoardShots(); applySheetStyleDefaults(); bindFocusable(document); triggerAll();
-
-  $('controlSearch').addEventListener('input', renderGroups);
-  $('modeSelect').addEventListener('change', e=>setMode(e.target.value));
-  document.querySelectorAll('.modeBtn').forEach(btn=>btn.addEventListener('click',()=>setMode(btn.dataset.mode)));
-  $('globalModel').addEventListener('change', triggerAll);
-  document.querySelectorAll('#panel-image textarea,#panel-image select').forEach(el=>el.addEventListener('input', compileImage));
-  $('videoDuration').addEventListener('input', ()=>{buildVideoShots();compileVideo();});
-  $('videoShots').addEventListener('input', ()=>{buildVideoShots();compileVideo();});
-  $('videoWorkflow').addEventListener('input', compileVideo); $('videoStyle').addEventListener('input', compileVideo); $('videoPremise').addEventListener('input', compileVideo);
-  $('boardShots').addEventListener('input', ()=>{buildBoardShots();compileBoard();}); $('boardAspect').addEventListener('input', compileBoard); $('boardStyle').addEventListener('input', compileBoard); $('boardCamera').addEventListener('input', compileBoard); $('boardPremise').addEventListener('input', compileBoard);
-  $('sheetType').addEventListener('input', ()=>{applySheetStyleDefaults(); compileSheet();}); $('sheetStyle').addEventListener('input', ()=>{applySheetStyleDefaults(); compileSheet();}); ['sheetBg','sheetSubject','sheetRefs','sheetDescription','sheetExtra','sheetDetail','sheetLabels','sheetFocus','sheetAspect'].forEach(id=>$(id).addEventListener('input', compileSheet));
-  $('addTokenBtn').addEventListener('click',()=>{ const type=$('newTokenType').value, name=clean($('newTokenName').value).replace(/\s+/g,'_').replace(/^@+/,''); if(!name) return; const tok='@'+type+'_'+name; if(!tokens.includes(tok)){ tokens.push(tok); safeStorage.set('lumacromTokens', tokens); renderTokens(); } $('newTokenName').value=''; });
-  document.querySelectorAll('[data-copy]').forEach(btn=>btn.addEventListener('click',()=>copyText($(btn.dataset.copy).value)));
-  $('copyTop').addEventListener('click',()=>copyText($(activeOutputId()).value));
-  $('clearAllTop').addEventListener('click', clearCurrent);
-  $('savePresetTop').addEventListener('click', savePreset);
-  $('loadPresetTop').addEventListener('click', loadPreset);
-
-  if('serviceWorker' in navigator){ window.addEventListener('load', ()=> navigator.serviceWorker.register('service-worker.js').catch(()=>{})); }
-})();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
